@@ -4,7 +4,6 @@ import parser.ast.*;
 import parser.types.Int;
 import parser.types.Type;
 import parser.types.Void;
-import startUp.Compiler;
 import tokenizer.CompilerException;
 import tokenizer.IdentifierToken;
 import tokenizer.IntLiteralToken;
@@ -14,14 +13,14 @@ import tokenizer.Token.TokenType;
 import java.util.*;
 
 public class Parser {
-    private Iterator<Token> tokens;
+    private TokenIterator tokens;
     private Scoper scoper;
     private Ast ast;
     private Token currentToken;
 
 
 
-    public Parser(Iterator<Token> tokens, Scoper scoper) {
+    public Parser(TokenIterator tokens, Scoper scoper) {
 
         this.tokens = tokens;
         this.scoper = scoper;
@@ -49,29 +48,29 @@ public class Parser {
 
     private void parseTopLevel() {
         Type type = parseType();
-        nextToken();
+        tokens.step();
 
         if (currentToken.getType() != TokenType.IDENTIFIER) {
             throw new CompilerException("Identifier expected");
         }
         String name = ((IdentifierToken) currentToken).getName();
 
-        nextToken();
+        tokens.step();
         if (currentToken.getType() == TokenType.BRACE_OPEN) {
             parseFunction(type, name);
         } else if (currentToken.getType() == TokenType.SEMICOLON) {
             scoper.getCurrentScope().add(new Variable(name, type));
-            nextToken();
+            tokens.step();
         } else if (currentToken.getType() == TokenType.EQUALS) {
             Variable v = new Variable(name, type);
             scoper.getCurrentScope().add(v);
-            nextToken();
+            tokens.step();
 
             Expression rhs = parseExpression();
             if (currentToken.getType() != TokenType.SEMICOLON) {
                 throw new CompilerException("';' Expected");
             }
-            nextToken();
+            tokens.step();
 
             ast.addInitialization(new Assignment(v, rhs));
         } else {
@@ -80,11 +79,11 @@ public class Parser {
     }
 
     private void parseFunction(Type returnType, String name) {
-        nextToken();
+        tokens.step();
         if (currentToken.getType() != TokenType.BRACE_CLOSE) {
             throw new CompilerException("Parameters are not supported yet");
         }
-        nextToken();
+        tokens.step();
         List<Statement> statements = parseBlock();
 
         Function function = new Function(name, returnType, scoper.popScope());
@@ -98,25 +97,25 @@ public class Parser {
         if (currentToken.getType() != TokenType.CURLY_BRACE_OPEN) {
             throw new CompilerException("Block Expected");
         }
-        nextToken();
+        tokens.step();
         while (currentToken.getType() != TokenType.CURLY_BRACE_CLOSE) {
             Statement statement = parseStatement();
             if (statement != null) {
                 ret.add(statement);
             }
         }
-        nextToken();
+        tokens.step();
         return ret;
     }
 
     private Statement parseStatement() {
         if (isType(currentToken)) {
             Variable v = declareVariable();
-            nextToken();
+            tokens.step();
             if (currentToken.getType() == TokenType.EQUALS) {
                 return parseAssignment(v);
             } else if (currentToken.getType() == TokenType.SEMICOLON) {
-                nextToken();
+                tokens.step();
                 return null;
             } else {
                 throw new CompilerException("Unexpected thing");
@@ -131,7 +130,7 @@ public class Parser {
     }
 
     private Statement parseIfElseStatement() {
-        nextToken();
+        tokens.step();
         expectedToken(TokenType.BRACE_OPEN);
         Expression condition = parseExpression();
         expectedToken(TokenType.BRACE_CLOSE);
@@ -140,7 +139,7 @@ public class Parser {
         List<Statement> elseStatements;
         List<Variable> elseScope;
         if (currentToken.getType() == TokenType.KEYWORD_ELSE) {
-            nextToken();
+            tokens.step();
             elseStatements = parseBlock();
             elseScope = scoper.popScope();
         } else {
@@ -152,7 +151,7 @@ public class Parser {
 
     private Variable declareVariable() {
         Type type = parseType();
-        nextToken();
+        tokens.step();
         if (currentToken.getType() != TokenType.IDENTIFIER) {
             throw new CompilerException("identifier expected");
         }
@@ -172,7 +171,7 @@ public class Parser {
         if (v == null) {
             throw new CompilerException("Undeclared variable " + name);
         }
-        nextToken();
+        tokens.step();
         return parseAssignment(v);
     }
 
@@ -181,19 +180,19 @@ public class Parser {
         if (currentToken.getType() != TokenType.EQUALS) {
             throw new CompilerException("Expected =");
         }
-        nextToken();
+        tokens.step();
         Expression rhs = parseExpression();
         if (currentToken.getType() != TokenType.SEMICOLON) {
             throw new CompilerException("';' Expected");
         }
-        nextToken();
+        tokens.step();
         return new Assignment(v, rhs);
     }
 
     private Expression parseExpression() {
         if (currentToken.getType() == TokenType.INT_LITERAL) {
             int value = ((IntLiteralToken) currentToken).getValue();
-            nextToken();
+            tokens.step();
             return new IntLiteral(value);
         } else if(currentToken.getType() == TokenType.IDENTIFIER) {
             String name = ((IdentifierToken) currentToken).getName();
@@ -201,7 +200,7 @@ public class Parser {
             if(v == null){
                 throw new CompilerException("Undeclared variable: " + name);
             }
-            nextToken();
+            tokens.step();
             return new VariableAccess(v);
         } else {
             throw new CompilerException("Unknown Expression");
@@ -222,21 +221,10 @@ public class Parser {
         }
     }
 
-    private void nextToken() {
-        if (currentToken == null) {
-            throw new CompilerException("Unexpected end of file");
-        }
-        if (tokens.hasNext()) {
-            currentToken = tokens.next();
-        } else {
-            currentToken = null;
-        }
-    }
-
     private void expectedToken(TokenType type) {
         if (currentToken.getType() != type) {
             throw new CompilerException("Unexpected symbol: " + currentToken.getType().toString());
         }
-        nextToken();
+        tokens.step();
     }
 }
