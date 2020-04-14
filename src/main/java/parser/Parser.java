@@ -15,19 +15,21 @@ import java.util.*;
 
 public class Parser {
     private Iterator<Token> tokens;
+    private Scoper scoper;
     private Ast ast;
     private Token currentToken;
 
-    private Stack<List<Variable>> scopes;
 
-    public Parser(Iterator<Token> tokens) {
+
+    public Parser(Iterator<Token> tokens, Scoper scoper) {
+
         this.tokens = tokens;
+        this.scoper = scoper;
         if (tokens.hasNext()) {
             currentToken = tokens.next();
         }
         ast = new Ast();
-        scopes = new Stack<>();
-        scopes.push(new LinkedList<>());
+
     }
 
     public void parse() {
@@ -35,7 +37,7 @@ public class Parser {
             while (tokens.hasNext()) {
                 parseTopLevel();
             }
-            ast.addVariables(scopes.pop());
+            ast.addVariables(scoper.popScope());
         } catch (NullPointerException e) {
             throw new CompilerException("Unexpected end of file");
         }
@@ -58,11 +60,11 @@ public class Parser {
         if (currentToken.getType() == TokenType.BRACE_OPEN) {
             parseFunction(type, name);
         } else if (currentToken.getType() == TokenType.SEMICOLON) {
-            scopes.peek().add(new Variable(name, type));
+            scoper.getCurrentScope().add(new Variable(name, type));
             nextToken();
         } else if (currentToken.getType() == TokenType.EQUALS) {
             Variable v = new Variable(name, type);
-            scopes.peek().add(v);
+            scoper.getCurrentScope().add(v);
             nextToken();
 
             Expression rhs = parseExpression();
@@ -85,13 +87,13 @@ public class Parser {
         nextToken();
         List<Statement> statements = parseBlock();
 
-        Function function = new Function(name, returnType, scopes.pop());
+        Function function = new Function(name, returnType, scoper.popScope());
         function.addStatements(statements);
         ast.addFunction(function);
     }
 
     private List<Statement> parseBlock() {
-        scopes.add(new LinkedList<>());
+        scoper.pushScope();
         List<Statement> ret = new LinkedList<>();
         if (currentToken.getType() != TokenType.CURLY_BRACE_OPEN) {
             throw new CompilerException("Block Expected");
@@ -134,13 +136,13 @@ public class Parser {
         Expression condition = parseExpression();
         expectedToken(TokenType.BRACE_CLOSE);
         List<Statement> ifStatements = parseBlock();
-        List<Variable> ifScope = scopes.pop();
+        List<Variable> ifScope = scoper.popScope();
         List<Statement> elseStatements;
         List<Variable> elseScope;
         if (currentToken.getType() == TokenType.KEYWORD_ELSE) {
             nextToken();
             elseStatements = parseBlock();
-            elseScope = scopes.pop();
+            elseScope = scoper.popScope();
         } else {
             elseStatements = new LinkedList<>();
             elseScope = new LinkedList<>();
@@ -155,30 +157,18 @@ public class Parser {
             throw new CompilerException("identifier expected");
         }
         String name = ((IdentifierToken) currentToken).getName();
-        Variable v = findVariable(name);
+        Variable v = scoper.findVariable(name);
         if (v != null) {
             throw new CompilerException("Redeclaration of Variable " + name);
         }
         Variable newVariable = new Variable(name, type);
-        scopes.peek().add(newVariable);
+        scoper.getCurrentScope().add(newVariable);
         return newVariable;
-    }
-
-    private Variable findVariable(String name) {
-        for (ListIterator<List<Variable>> i = scopes.listIterator(scopes.size()); i.hasPrevious();) {
-            List<Variable> scope = i.previous();
-            for (Variable v : scope) {
-                if (v.getName().equals(name)) {
-                    return v;
-                }
-            }
-        }
-        return null;
     }
 
     private Assignment parseAssignment() {
         String name = ((IdentifierToken) currentToken).getName();
-        Variable v = findVariable(name);
+        Variable v = scoper.findVariable(name);
         if (v == null) {
             throw new CompilerException("Undeclared variable " + name);
         }
@@ -206,9 +196,10 @@ public class Parser {
             nextToken();
             return new IntLiteral(value);
         } else if(currentToken.getType() == TokenType.IDENTIFIER) {
-            Variable v = findVariable(((IdentifierToken)currentToken).getName());
+            String name = ((IdentifierToken) currentToken).getName();
+            Variable v = scoper.findVariable(name);
             if(v == null){
-                throw new CompilerException("Undeclared variable: " + v.getName());
+                throw new CompilerException("Undeclared variable: " + name);
             }
             nextToken();
             return new VariableAccess(v);
