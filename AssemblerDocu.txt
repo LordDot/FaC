@@ -1,0 +1,32 @@
+Store into Register: R
+Load Constant: O
+Operand 1: 1
+Operand 2: 2
+Select Operand 1: A
+Select Operand 2: B
+Operand 1 pointer: S
+Operand 2 pointer: T
+
+Operations:
+  times: wooden chest
+  divide: iron chest
+  add: steel chest
+  minus: tank
+  mod: yellow belt
+  exponentiation: red belt
+  left shift: blue belt
+  right shift: yellow underground belt
+  and: red underground belt
+  or: blue underground belt
+  xor: yellow splitter
+  >: red splitter
+  <: blue splitter
+  ==: burner inserter
+  >=: inserter
+  <=: long inserter
+  !=: fast inserter
+
+jumps:
+  unconditional: J1, O address
+  conditional: J2, D address, O>0 (alu output)
+  
