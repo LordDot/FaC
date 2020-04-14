@@ -59,4 +59,11 @@ public class TokenizerTest {
         testString(program, result);
     }
 
+    @Test
+    public void testSimpleOperators() throws IOException {
+        String program = "+-/*";
+        Token[] result = {new Token(TokenType.PLUS), new Token(TokenType.MINUS), new Token(TokenType.SLASH), new Token(TokenType.STAR)};
+        testString(program,result);
+    }
+
 }

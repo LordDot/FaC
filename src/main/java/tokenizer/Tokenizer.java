@@ -56,11 +56,19 @@ public class Tokenizer implements Iterator<Token>{
                         case ')':
                             currentChar = input.read();
                             return new Token(Token.TokenType.BRACE_CLOSE);
-                        /*case '*':
-                        case '!':
+                        case '*':
+                            currentChar = input.read();
+                            return new Token(Token.TokenType.STAR);
+                        //case '!':
                         case '+':
+                            currentChar = input.read();
+                            return new Token(Token.TokenType.PLUS);
                         case '-':
-                        case '/':*/
+                            currentChar = input.read();
+                            return new Token(Token.TokenType.MINUS);
+                        case '/':
+                            currentChar = input.read();
+                            return new Token(Token.TokenType.SLASH);
                         case ';':
                             currentChar = input.read();
                             return new Token(Token.TokenType.SEMICOLON);
