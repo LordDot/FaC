@@ -39,4 +39,19 @@ public abstract class BinaryExpression extends Expression{
     public Expression getLhs() {
         return lhs;
     }
+
+    @Override
+    public String toPrettyString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("(");
+        builder.append(lhs.toPrettyString());
+        builder.append(") ");
+        builder.append(getOperator());
+        builder.append(" (");
+        builder.append(rhs.toPrettyString());
+        builder.append(")");
+        return builder.toString();
+    }
+
+    protected abstract String getOperator();
 }

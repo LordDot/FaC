@@ -49,7 +49,18 @@ public class ExpressionParser {
     }
 
     private Expression parseLevel5(){
-        return parseLevel6();
+        Expression lhs =  parseLevel6();
+        while(tokens.getCurrentToken().getType() == TokenType.STAR || tokens.getCurrentToken().getType() == TokenType.SLASH){
+            TokenType type = tokens.getCurrentToken().getType();
+            tokens.step();
+            Expression rhs = parseLevel6();
+            if(type == TokenType.STAR){
+                lhs = new MultiplicationExpression(lhs, rhs);
+            }else if(type == TokenType.SLASH){
+                lhs = new DivisionExpression(lhs, rhs);
+            }
+        }
+        return lhs;
     }
 
     private Expression parseLevel6(){

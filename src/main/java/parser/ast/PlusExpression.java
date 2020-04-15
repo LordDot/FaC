@@ -10,18 +10,12 @@ public class PlusExpression extends BinaryExpression{
     }
 
     @Override
-    public String toPrettyString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("(");
-        builder.append(getLhs().toPrettyString());
-        builder.append((") + ("));
-        builder.append(getRhs().toPrettyString());
-        builder.append(")");
-        return builder.toString();
+    public int getValue() {
+        return getLhs().getValue() + getRhs().getValue();
     }
 
     @Override
-    public int getValue() {
-        return getLhs().getValue() + getRhs().getValue();
+    protected String getOperator() {
+        return "+";
     }
 }
