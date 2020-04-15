@@ -34,7 +34,18 @@ public class ExpressionParser {
     }
 
     private Expression parseLevel4(){
-        return parseLevel5();
+        Expression lhs = parseLevel5();
+        while(tokens.getCurrentToken().getType() == TokenType.PLUS || tokens.getCurrentToken().getType() == TokenType.MINUS){
+            TokenType type = tokens.getCurrentToken().getType();
+            tokens.step();
+            Expression rhs = parseLevel5();
+            if (type == TokenType.PLUS) {
+                lhs = new PlusExpression(lhs, rhs);
+            }else if(type == TokenType.MINUS){
+                lhs = new MinusExpression(lhs, rhs);
+            }
+        }
+        return lhs;
     }
 
     private Expression parseLevel5(){
@@ -42,13 +53,7 @@ public class ExpressionParser {
     }
 
     private Expression parseLevel6(){
-        Expression lhs = parseLevel7();
-        while(tokens.getCurrentToken().getType() == TokenType.PLUS){
-            tokens.step();
-            Expression rhs = parseLevel7();
-            lhs = new PlusExpression(lhs, rhs);
-        }
-        return lhs;
+        return parseLevel7();
     }
 
     private Expression parseLevel7(){

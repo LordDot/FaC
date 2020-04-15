@@ -8,7 +8,7 @@ public abstract class BinaryExpression extends Expression{
     private Expression lhs;
     private Operation operation;
 
-    public BinaryExpression(Expression rhs, Expression lhs, Operation operation) {
+    public BinaryExpression(Expression lhs, Expression rhs, Operation operation) {
         this.rhs = rhs;
         this.lhs = lhs;
         this.operation = operation;
