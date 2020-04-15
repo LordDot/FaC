@@ -1,8 +1,10 @@
 package parser.ast;
 
 import codeGeneration.AssemblyGenerator.Operation;
+import parser.types.Int;
+import parser.types.Type;
 
-public class NegationExpression extends UnaryExpression {
+public class NegationExpression extends UnaryExpression<Integer, Integer> {
     public NegationExpression(Expression operand) {
         super(operand, Operation.NEGATION);
     }
@@ -18,7 +20,12 @@ public class NegationExpression extends UnaryExpression {
     }
 
     @Override
-    public int getValue() {
-        return -getOperand().getValue();
+    public Integer getValue() {
+        return -((Integer)getOperand().getValue());
+    }
+
+    @Override
+    public Type getType() {
+        return new Int();
     }
 }

@@ -89,10 +89,10 @@ public class FacAssemblyGenerator implements AssemblyGenerator{
     }
 
     @Override
-    public void loadConstant(int address, Expression value) {
+    public void loadConstant(int address, int value) {
         Map<String, Integer> command = new HashMap<>();
         command.put("R", address);
-        command.put("O", value.getValue());
+        command.put("O", value);
         generatedAssembly.add(command);
     }
 

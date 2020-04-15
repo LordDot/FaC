@@ -459,4 +459,33 @@ public class ParserTest {
                 "}\n\n";
         compareResult(tokens, expected);
     }
+
+    @Test
+    public void testParenthesis(){
+        Token[] tokens = {
+                new Token(TokenType.KEYWORD_VOID),
+                new IdentifierToken("main"),
+                new Token(TokenType.BRACE_OPEN),
+                new Token(TokenType.BRACE_CLOSE),
+                new Token(TokenType.CURLY_BRACE_OPEN),
+                new Token(TokenType.KEYWORD_INT),
+                new IdentifierToken("i"),
+                new Token(TokenType.EQUALS),
+                new Token(TokenType.BRACE_OPEN),
+                new IntLiteralToken(1),
+                new Token(TokenType.MINUS),
+                new IntLiteralToken(1),
+                new Token(TokenType.BRACE_CLOSE),
+                new Token(TokenType.STAR),
+                new IntLiteralToken(1),
+                new Token(TokenType.SEMICOLON),
+                new Token(TokenType.CURLY_BRACE_CLOSE)
+        };
+        String expected = "\n" +
+                "void main(){\n" +
+                "int i;\n" +
+                "i = ((1) - (1)) * (1);\n" +
+                "}\n\n";
+        compareResult(tokens, expected);
+    }
 }

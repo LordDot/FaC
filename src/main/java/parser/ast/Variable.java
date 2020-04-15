@@ -18,4 +18,8 @@ public class Variable {
     public String toPrettyString(){
         return type.toString() + " " + name + ";";
     }
+
+    public Type getType() {
+        return type;
+    }
 }

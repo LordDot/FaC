@@ -3,12 +3,12 @@ package parser.ast;
 import codeGeneration.AssemblyGenerator;
 import codeGeneration.AssemblyGenerator.Operation;
 
-public abstract class BinaryExpression extends Expression{
-    private Expression rhs;
-    private Expression lhs;
+public abstract class BinaryExpression<R,T1,T2> extends Expression<R>{
+    private Expression<T1> lhs;
+    private Expression<T2> rhs;
     private Operation operation;
 
-    public BinaryExpression(Expression lhs, Expression rhs, Operation operation) {
+    public BinaryExpression(Expression<T1> lhs, Expression<T2> rhs, Operation operation) {
         this.rhs = rhs;
         this.lhs = lhs;
         this.operation = operation;

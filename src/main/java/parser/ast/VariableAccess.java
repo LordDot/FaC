@@ -1,8 +1,9 @@
 package parser.ast;
 
 import codeGeneration.AssemblyGenerator;
+import parser.types.Type;
 
-public class VariableAccess extends Expression {
+public class VariableAccess extends Expression<Integer> {
     private Variable accessed;
 
     public VariableAccess(Variable accessed) {
@@ -20,12 +21,17 @@ public class VariableAccess extends Expression {
     }
 
     @Override
-    public int getValue() {
-        return 0;
+    public Integer getValue() {
+        return null;
     }
 
     @Override
     public void generateAssembly(AssemblyGenerator generator, int into) {
         generator.generateCopy(into, accessed.getName());
+    }
+
+    @Override
+    public Type getType() {
+        return accessed.getType();
     }
 }

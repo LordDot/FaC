@@ -13,7 +13,7 @@ public interface AssemblyGenerator {
     void generateAssignment(String variableName, Expression value);
     void generateAssignment(int address, Expression value);
     void generateCopy(int address, String variableName);
-    void loadConstant(int address, Expression value);
+    void loadConstant(int address, int value);
     int getFreeAddress();
     void generateUnaryOperation(Operation operation, int into, int operandAddress);
     void generateBinaryOperation(Operation op, int into, int lhs, int rhs);

@@ -1,9 +1,11 @@
 package parser.ast;
 
 import codeGeneration.AssemblyGenerator.Operation;
+import parser.types.Int;
+import parser.types.Type;
 
-public class DivisionExpression extends BinaryExpression{
-    public DivisionExpression(Expression lhs, Expression rhs) {
+public class DivisionExpression extends BinaryExpression<Integer, Integer, Integer>{
+    public DivisionExpression(Expression<Integer> lhs, Expression<Integer> rhs) {
         super(lhs, rhs, Operation.DIVISION);
     }
 
@@ -13,7 +15,12 @@ public class DivisionExpression extends BinaryExpression{
     }
 
     @Override
-    public int getValue() {
-        return getLhs().getValue() / getRhs().getValue();
+    public Integer getValue() {
+        return ((Integer)getLhs().getValue()) / ((Integer)getRhs().getValue());
+    }
+
+    @Override
+    public Type getType() {
+        return new Int();
     }
 }

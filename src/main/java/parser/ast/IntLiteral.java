@@ -1,8 +1,10 @@
 package parser.ast;
 
 import codeGeneration.AssemblyGenerator;
+import parser.types.Int;
+import parser.types.Type;
 
-public class IntLiteral extends Expression{
+public class IntLiteral extends Expression<Integer>{
     private int value;
 
     public IntLiteral(int value) {
@@ -15,7 +17,7 @@ public class IntLiteral extends Expression{
     }
 
     @Override
-    public int getValue(){
+    public Integer getValue(){
         return value;
     }
 
@@ -26,6 +28,11 @@ public class IntLiteral extends Expression{
 
     @Override
     public void generateAssembly(AssemblyGenerator generator, int into) {
-        generator.loadConstant(into, this);
+        generator.loadConstant(into, value);
+    }
+
+    @Override
+    public Type getType() {
+        return new Int();
     }
 }

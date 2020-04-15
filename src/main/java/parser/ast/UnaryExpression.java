@@ -3,8 +3,8 @@ package parser.ast;
 import codeGeneration.AssemblyGenerator;
 import codeGeneration.AssemblyGenerator.Operation;
 
-public abstract class UnaryExpression extends Expression {
-    private Expression operand;
+public abstract class UnaryExpression<R,T> extends Expression<R> {
+    private Expression<T> operand;
     private Operation operation;
 
     public UnaryExpression(Expression operand, Operation operation) {
