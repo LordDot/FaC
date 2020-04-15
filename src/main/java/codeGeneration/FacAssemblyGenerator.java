@@ -1,13 +1,19 @@
 package codeGeneration;
 
 import parser.ast.Expression;
-import parser.ast.Variable;
-import parser.types.Int;
 import tokenizer.CompilerException;
 
 import java.util.*;
 
 public class FacAssemblyGenerator implements AssemblyGenerator{
+    public static Map<AssemblyGenerator.Operation, FacOperation> operationMapping = new HashMap<>();
+    {
+        operationMapping.put(Operation.ADDITION,new FacOperation("steel chest"));
+        operationMapping.put(Operation.SUBTRACTION,new FacOperation("tank"));
+        operationMapping.put(Operation.MULTIPLIKATION,new FacOperation("wooden chest"));
+        operationMapping.put(Operation.DIVISION,new FacOperation("iron chest"));
+    }
+
     private Stack<Map<String,Integer>> scopes;
     private int scopePointer;
 
@@ -26,8 +32,19 @@ public class FacAssemblyGenerator implements AssemblyGenerator{
         return generatedAssembly;
     }
 
-    private int getNewVariableAdress(){
+    @Override
+    public int getFreeAddress(){
         return scopePointer++;
+    }
+
+    @Override
+    public void generateBinaryOperation(Operation op, int into, int lhs, int rhs) {
+        Map<String, Integer> command = new HashMap<>();
+        command.put("A", lhs);
+        command.put("B", rhs);
+        command.put("R", into);
+        command.put(operationMapping.get(op).getOpCode(), 1);
+        generatedAssembly.add(command);
     }
 
     @Override
@@ -43,7 +60,7 @@ public class FacAssemblyGenerator implements AssemblyGenerator{
 
     @Override
     public void declareVariable(String name) {
-        scopes.peek().put(name,getNewVariableAdress());
+        scopes.peek().put(name, getFreeAddress());
     }
 
     @Override
@@ -100,5 +117,17 @@ public class FacAssemblyGenerator implements AssemblyGenerator{
             }
         }
         return null;
+    }
+
+    private class FacOperation{
+        private String opCode;
+
+        public FacOperation(String opCode) {
+            this.opCode = opCode;
+        }
+
+        public String getOpCode() {
+            return opCode;
+        }
     }
 }

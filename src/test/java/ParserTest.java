@@ -1,5 +1,8 @@
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import parser.Parser;
+import parser.Scoper;
+import parser.TokenIterator;
 import tokenizer.IdentifierToken;
 import tokenizer.IntLiteralToken;
 import tokenizer.Token;
@@ -12,39 +15,40 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 public class ParserTest {
-   @Test
-   public void simpleAst(){
-       Token[] tokens = {
-               new Token(TokenType.KEYWORD_VOID),
-               new IdentifierToken("main"),
-               new Token(TokenType.BRACE_OPEN),
-               new Token(TokenType.BRACE_CLOSE),
-               new Token(TokenType.CURLY_BRACE_OPEN),
-               new Token(TokenType.KEYWORD_INT),
-               new IdentifierToken("i"),
-               new Token(TokenType.EQUALS),
-               new IntLiteralToken(0),
-               new Token(TokenType.SEMICOLON),
-               new Token(TokenType.CURLY_BRACE_CLOSE)
-       };
-       String expected = "\n" +
-               "void main(){\n" +
-               "int i;\n" +
-               "i = 0;\n" +
-               "}\n\n";
-       compareResult(tokens, expected);
-   }
+    @Test
+    public void simpleAst() {
+        Token[] tokens = {
+                new Token(TokenType.KEYWORD_VOID),
+                new IdentifierToken("main"),
+                new Token(TokenType.BRACE_OPEN),
+                new Token(TokenType.BRACE_CLOSE),
+                new Token(TokenType.CURLY_BRACE_OPEN),
+                new Token(TokenType.KEYWORD_INT),
+                new IdentifierToken("i"),
+                new Token(TokenType.EQUALS),
+                new IntLiteralToken(0),
+                new Token(TokenType.SEMICOLON),
+                new Token(TokenType.CURLY_BRACE_CLOSE)
+        };
+        String expected = "\n" +
+                "void main(){\n" +
+                "int i;\n" +
+                "i = 0;\n" +
+                "}\n\n";
+        compareResult(tokens, expected);
+    }
 
     private void compareResult(Token[] tokens, String expected) {
         List<Token> tokenList = Arrays.asList(tokens);
-        Parser parser = new Parser(tokenList.iterator());
+        Scoper s = new Scoper();
+        Parser parser = new Parser(new TokenIterator(tokenList.iterator()) ,s);
         parser.parse();
         String result = parser.getAst().toPrettyString();
-        assertEquals(expected,result);
+        assertEquals(expected, result);
     }
 
     @Test
-    public void noStatements(){
+    public void noStatements() {
         Token[] tokens = {
                 new Token(TokenType.KEYWORD_VOID),
                 new IdentifierToken("main"),
@@ -56,11 +60,11 @@ public class ParserTest {
         String expected = "\n" +
                 "void main(){\n" +
                 "}\n\n";
-        compareResult(tokens,expected);
+        compareResult(tokens, expected);
     }
 
     @Test
-    public void declarationWithoutAssignment(){
+    public void declarationWithoutAssignment() {
         Token[] tokens = {
                 new Token(TokenType.KEYWORD_VOID),
                 new IdentifierToken("main"),
@@ -80,7 +84,7 @@ public class ParserTest {
     }
 
     @Test
-    public void globalVariable(){
+    public void globalVariable() {
         Token[] tokens = {
                 new Token(TokenType.KEYWORD_INT),
                 new IdentifierToken("i"),
@@ -100,7 +104,7 @@ public class ParserTest {
     }
 
     @Test
-    public void globalVariableWithAssignment(){
+    public void globalVariableWithAssignment() {
         Token[] tokens = {
                 new Token(TokenType.KEYWORD_INT),
                 new IdentifierToken("i"),
@@ -123,28 +127,28 @@ public class ParserTest {
     }
 
     @Test
-    public void interScopeAssignment(){
-       Token[] tokens = {
-               new Token(TokenType.KEYWORD_INT),
-               new IdentifierToken("i"),
-               new Token(TokenType.SEMICOLON),
-               new Token(TokenType.KEYWORD_VOID),
-               new IdentifierToken("main"),
-               new Token(TokenType.BRACE_OPEN),
-               new Token(TokenType.BRACE_CLOSE),
-               new Token(TokenType.CURLY_BRACE_OPEN),
-               new IdentifierToken("i"),
-               new Token(TokenType.EQUALS),
-               new IntLiteralToken(2),
-               new Token(TokenType.SEMICOLON),
-               new Token(TokenType.CURLY_BRACE_CLOSE),
-       };
-       String expected = "int i;\n" +
-               "\n" +
-               "void main(){\n" +
-               "i = 2;\n" +
-               "}\n\n";
-       compareResult(tokens, expected);
+    public void interScopeAssignment() {
+        Token[] tokens = {
+                new Token(TokenType.KEYWORD_INT),
+                new IdentifierToken("i"),
+                new Token(TokenType.SEMICOLON),
+                new Token(TokenType.KEYWORD_VOID),
+                new IdentifierToken("main"),
+                new Token(TokenType.BRACE_OPEN),
+                new Token(TokenType.BRACE_CLOSE),
+                new Token(TokenType.CURLY_BRACE_OPEN),
+                new IdentifierToken("i"),
+                new Token(TokenType.EQUALS),
+                new IntLiteralToken(2),
+                new Token(TokenType.SEMICOLON),
+                new Token(TokenType.CURLY_BRACE_CLOSE),
+        };
+        String expected = "int i;\n" +
+                "\n" +
+                "void main(){\n" +
+                "i = 2;\n" +
+                "}\n\n";
+        compareResult(tokens, expected);
     }
 
     @Test
@@ -190,27 +194,27 @@ public class ParserTest {
     }
 
     @Test
-    public void testVariableAccess(){
-       Token[] tokens = {
-               new Token(TokenType.KEYWORD_VOID),
-               new IdentifierToken("main"),
-               new Token(TokenType.BRACE_OPEN),
-               new Token(TokenType.BRACE_CLOSE),
-               new Token(TokenType.CURLY_BRACE_OPEN),
-               new Token(TokenType.KEYWORD_INT),
-               new IdentifierToken("i"),
-               new Token(TokenType.EQUALS),
-               new IntLiteralToken(1),
-               new Token(TokenType.SEMICOLON),
-               new Token(TokenType.KEYWORD_INT),
-               new IdentifierToken("j"),
-               new Token(TokenType.SEMICOLON),
-               new IdentifierToken("j"),
-               new Token(TokenType.EQUALS),
-               new IdentifierToken("i"),
-               new Token(TokenType.SEMICOLON),
-               new Token(TokenType.CURLY_BRACE_CLOSE)
-       };
+    public void testVariableAccess() {
+        Token[] tokens = {
+                new Token(TokenType.KEYWORD_VOID),
+                new IdentifierToken("main"),
+                new Token(TokenType.BRACE_OPEN),
+                new Token(TokenType.BRACE_CLOSE),
+                new Token(TokenType.CURLY_BRACE_OPEN),
+                new Token(TokenType.KEYWORD_INT),
+                new IdentifierToken("i"),
+                new Token(TokenType.EQUALS),
+                new IntLiteralToken(1),
+                new Token(TokenType.SEMICOLON),
+                new Token(TokenType.KEYWORD_INT),
+                new IdentifierToken("j"),
+                new Token(TokenType.SEMICOLON),
+                new IdentifierToken("j"),
+                new Token(TokenType.EQUALS),
+                new IdentifierToken("i"),
+                new Token(TokenType.SEMICOLON),
+                new Token(TokenType.CURLY_BRACE_CLOSE)
+        };
         String expected = "\n" +
                 "void main(){\n" +
                 "int i;\n" +
@@ -218,11 +222,11 @@ public class ParserTest {
                 "i = 1;\n" +
                 "j = i;\n" +
                 "}\n\n";
-        compareResult(tokens,expected);
+        compareResult(tokens, expected);
     }
 
     @Test
-    public void testVariableAccessWithDeclaration(){
+    public void testVariableAccessWithDeclaration() {
         Token[] tokens = {
                 new Token(TokenType.KEYWORD_VOID),
                 new IdentifierToken("main"),
@@ -248,6 +252,31 @@ public class ParserTest {
                 "i = 1;\n" +
                 "j = i;\n" +
                 "}\n\n";
-        compareResult(tokens,expected);
+        compareResult(tokens, expected);
+    }
+
+    @Test
+    public void testPlus() {
+        Token[] tokens = {
+                new Token(TokenType.KEYWORD_VOID),
+                new IdentifierToken("main"),
+                new Token(TokenType.BRACE_OPEN),
+                new Token(TokenType.BRACE_CLOSE),
+                new Token(TokenType.CURLY_BRACE_OPEN),
+                new Token(TokenType.KEYWORD_INT),
+                new IdentifierToken("i"),
+                new Token(TokenType.EQUALS),
+                new IntLiteralToken(1),
+                new Token(TokenType.PLUS),
+                new IntLiteralToken(1),
+                new Token(TokenType.SEMICOLON),
+                new Token(TokenType.CURLY_BRACE_CLOSE)
+        };
+        String expected = "\n" +
+                "void main(){\n" +
+                "int i;\n" +
+                "i = (1) + (1);\n" +
+                "}\n\n";
+        compareResult(tokens, expected);
     }
 }

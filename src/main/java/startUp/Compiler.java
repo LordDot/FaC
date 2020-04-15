@@ -5,6 +5,8 @@ import codeGeneration.FacAssemblyGenerator;
 import codeGeneration.Formatter;
 import codeGeneration.PrettyFormatter;
 import parser.Parser;
+import parser.Scoper;
+import parser.TokenIterator;
 import tokenizer.Tokenizer;
 
 import java.io.IOException;
@@ -20,7 +22,8 @@ public class Compiler {
 
     public static Compiler createNew(Reader input, int addressBuffer, OutputStream outputStream) throws IOException {
         Tokenizer t = new Tokenizer(input);
-        Parser p = new Parser(t);
+        Scoper s = new Scoper();
+        Parser p = new Parser(new TokenIterator(t), s);
         FacAssemblyGenerator g = new FacAssemblyGenerator(addressBuffer);
         Formatter formatter = new PrettyFormatter();
         return new Compiler(t,p,g, formatter, outputStream);

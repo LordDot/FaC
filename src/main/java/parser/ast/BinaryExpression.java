@@ -1,0 +1,42 @@
+package parser.ast;
+
+import codeGeneration.AssemblyGenerator;
+import codeGeneration.AssemblyGenerator.Operation;
+
+public abstract class BinaryExpression extends Expression{
+    private Expression rhs;
+    private Expression lhs;
+    private Operation operation;
+
+    public BinaryExpression(Expression rhs, Expression lhs, Operation operation) {
+        this.rhs = rhs;
+        this.lhs = lhs;
+        this.operation = operation;
+    }
+
+    @Override
+    public boolean isConstant() {
+        return rhs.isConstant() && lhs.isConstant();
+    }
+
+    @Override
+    public void generateAssembly(AssemblyGenerator generator, int into) {
+        int lhsAddress = generator.getFreeAddress();
+        int rhsAddress = generator.getFreeAddress();
+        lhs.generateAssembly(generator, lhsAddress);
+        rhs.generateAssembly(generator, rhsAddress);
+        generateOperation(generator, into, lhsAddress, rhsAddress);
+    }
+
+    public void generateOperation(AssemblyGenerator generator, int into, int lhs, int rhs){
+        generator.generateBinaryOperation(operation, into, lhs, rhs);
+    }
+
+    public Expression getRhs() {
+        return rhs;
+    }
+
+    public Expression getLhs() {
+        return lhs;
+    }
+}

@@ -13,6 +13,8 @@ public class TokenIterator implements Iterator<Token> {
 
     public TokenIterator(Iterator<Token> source) {
         this.source = source;
+        currentToken = hasNext()? source.next(): null;
+
     }
 
     @Override
@@ -35,5 +37,12 @@ public class TokenIterator implements Iterator<Token> {
 
     public Token getCurrentToken(){
         return currentToken;
+    }
+
+    @Override
+    public String toString() {
+        return "TokenIterator{" +
+                "currentToken=" + currentToken +
+                '}';
     }
 }

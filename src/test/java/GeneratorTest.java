@@ -158,4 +158,37 @@ public class GeneratorTest {
 
         assertEquals(expected, generator.getGeneratedAssembly());
     }
+
+    @Test
+    public void testAddition(){
+        Ast ast = new Ast();
+        Variable i = new Variable("i", new Int());
+        Function function = new Function("main", new Void(), Arrays.asList(i));
+        Statement assignI = new Assignment(i, new PlusExpression(new IntLiteral(1),new IntLiteral(1)));
+        function.addStatement(assignI);
+        ast.addFunction(function);
+
+        FacAssemblyGenerator generator = new FacAssemblyGenerator(0);
+        ast.generateAssembly(generator);
+
+        List<Map<String, Integer>> expected = new LinkedList<>();
+        Map<String, Integer> command1 = new HashMap<>();
+        command1.put("R", 1);
+        command1.put("O", 1);
+        expected.add(command1);
+
+        Map<String,Integer> command2 = new HashMap<>();
+        command2.put("R", 2);
+        command2.put("O", 1);
+        expected.add(command2);
+
+        Map<String, Integer> command3 = new HashMap<>();
+        command3.put("R", 0);
+        command3.put("A", 1);
+        command3.put("B", 2);
+        command3.put("steel chest", 1);
+        expected.add(command3);
+
+        assertEquals(expected, generator.getGeneratedAssembly());
+    }
 }

@@ -14,4 +14,13 @@ public interface AssemblyGenerator {
     void generateAssignment(int address, Expression value);
     void generateCopy(int address, String variableName);
     void loadConstant(int address, Expression value);
+    int getFreeAddress();
+    void generateBinaryOperation(Operation op, int into, int lhs, int rhs);
+
+    public enum Operation {
+        ADDITION,
+        SUBTRACTION,
+        MULTIPLIKATION,
+        DIVISION
+    };
 }
