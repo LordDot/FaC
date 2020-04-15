@@ -2,14 +2,14 @@
 
 ## Operator Presedence
 
-### Level 1
+### Level 7
 - `++`
 - `--`
 - function call
 - Array Subscripting
 - `.` access
 
-### Level 2
+### Level 6
 - `+` unary
 - `-` unary
 - `!`
@@ -17,7 +17,7 @@
 - cast
 - sizeof
 
-### Level 3
+### Level 5
 - `*`
 - `/`
 - `%`
@@ -28,7 +28,7 @@
 - `<<`
 - `>>`
 
-### Level 5
+### Level 3
 - `<`
 - `>`
 - `<=`
@@ -36,12 +36,12 @@
 - `==`
 - `!=`
 
-### Level 6
+### Level 2
 - `&`
 - `^`
 - `|`
 - `&&`
 - `||`
 
-### Level 7
+### Level 1
 - `?:`
