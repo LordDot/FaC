@@ -5,6 +5,7 @@ import tokenizer.Token;
 import tokenizer.Token.TokenType;
 import tokenizer.Tokenizer;
 
+import javax.swing.text.StyleContext;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
@@ -64,6 +65,27 @@ public class TokenizerTest {
         String program = "+-/*";
         Token[] result = {new Token(TokenType.PLUS), new Token(TokenType.MINUS), new Token(TokenType.SLASH), new Token(TokenType.STAR)};
         testString(program,result);
+    }
+
+    @Test
+    public void testGreaterSigns() throws IOException {
+        String program = "> >> >> > >";
+        Token[] result = {new Token(TokenType.GREATER), new Token(TokenType.RIGHT_SHIFT), new Token(TokenType.RIGHT_SHIFT), new Token(TokenType.GREATER), new Token(TokenType.GREATER)};
+        testString(program, result);
+    }
+
+    @Test
+    public void testSmallerSigns() throws IOException {
+        String program = "< << << < <";
+        Token[] result = {new Token(TokenType.SMALLER), new Token(TokenType.LEFT_SHIFT), new Token(TokenType.LEFT_SHIFT), new Token(TokenType.SMALLER), new Token(TokenType.SMALLER)};
+        testString(program, result);
+    }
+
+    @Test
+    public void testTrailingWhiteSpace() throws IOException {
+        String program = "asgjk ";
+        Token[] result = {new IdentifierToken("asgjk")};
+        testString(program, result);
     }
 
 }

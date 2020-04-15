@@ -382,5 +382,81 @@ public class ParserTest {
         compareResult(tokens, expected);
     }
 
-    
+    @Test
+    public void testUnaryPlus(){
+        Token[] tokens = {
+                new Token(TokenType.KEYWORD_VOID),
+                new IdentifierToken("main"),
+                new Token(TokenType.BRACE_OPEN),
+                new Token(TokenType.BRACE_CLOSE),
+                new Token(TokenType.CURLY_BRACE_OPEN),
+                new Token(TokenType.KEYWORD_INT),
+                new IdentifierToken("i"),
+                new Token(TokenType.EQUALS),
+                new Token(TokenType.PLUS),
+                new IntLiteralToken(1),
+                new Token(TokenType.SEMICOLON),
+                new Token(TokenType.CURLY_BRACE_CLOSE)
+        };
+        String expected = "\n" +
+                "void main(){\n" +
+                "int i;\n" +
+                "i = 1;\n" +
+                "}\n\n";
+        compareResult(tokens, expected);
+    }
+
+    @Test
+    public void testUnaryMinus(){
+        Token[] tokens = {
+                new Token(TokenType.KEYWORD_VOID),
+                new IdentifierToken("main"),
+                new Token(TokenType.BRACE_OPEN),
+                new Token(TokenType.BRACE_CLOSE),
+                new Token(TokenType.CURLY_BRACE_OPEN),
+                new Token(TokenType.KEYWORD_INT),
+                new IdentifierToken("i"),
+                new Token(TokenType.EQUALS),
+                new Token(TokenType.MINUS),
+                new IntLiteralToken(1),
+                new Token(TokenType.SEMICOLON),
+                new Token(TokenType.CURLY_BRACE_CLOSE)
+        };
+        String expected = "\n" +
+                "void main(){\n" +
+                "int i;\n" +
+                "i = -(1);\n" +
+                "}\n\n";
+        compareResult(tokens, expected);
+    }
+
+    @Test
+    public void testUnaryOperationChaining(){
+        Token[] tokens = {
+                new Token(TokenType.KEYWORD_VOID),
+                new IdentifierToken("main"),
+                new Token(TokenType.BRACE_OPEN),
+                new Token(TokenType.BRACE_CLOSE),
+                new Token(TokenType.CURLY_BRACE_OPEN),
+                new Token(TokenType.KEYWORD_INT),
+                new IdentifierToken("i"),
+                new Token(TokenType.EQUALS),
+                new Token(TokenType.MINUS),
+                new Token(TokenType.MINUS),
+                new Token(TokenType.PLUS),
+                new Token(TokenType.PLUS),
+                new Token(TokenType.MINUS),
+                new Token(TokenType.PLUS),
+                new Token(TokenType.MINUS),
+                new IntLiteralToken(1),
+                new Token(TokenType.SEMICOLON),
+                new Token(TokenType.CURLY_BRACE_CLOSE)
+        };
+        String expected = "\n" +
+                "void main(){\n" +
+                "int i;\n" +
+                "i = -(-(-(-(1))));\n" +
+                "}\n\n";
+        compareResult(tokens, expected);
+    }
 }

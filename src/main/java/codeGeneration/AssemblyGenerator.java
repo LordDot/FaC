@@ -15,12 +15,14 @@ public interface AssemblyGenerator {
     void generateCopy(int address, String variableName);
     void loadConstant(int address, Expression value);
     int getFreeAddress();
+    void generateUnaryOperation(Operation operation, int into, int operandAddress);
     void generateBinaryOperation(Operation op, int into, int lhs, int rhs);
 
     public enum Operation {
         ADDITION,
         SUBTRACTION,
         MULTIPLIKATION,
-        DIVISION
+        DIVISION,
+        NEGATION
     };
 }

@@ -38,6 +38,11 @@ public class FacAssemblyGenerator implements AssemblyGenerator{
     }
 
     @Override
+    public void generateUnaryOperation(Operation operation, int into, int operandAddress) {
+        throw new RuntimeException("NotImplemented yet!");
+    }
+
+    @Override
     public void generateBinaryOperation(Operation op, int into, int lhs, int rhs) {
         Map<String, Integer> command = new HashMap<>();
         command.put("A", lhs);

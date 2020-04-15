@@ -17,6 +17,13 @@ public class Tokenizer implements Iterator<Token>{
 
     @Override
     public boolean hasNext() {
+        if(Character.isWhitespace(currentChar)){
+            try {
+                readWhiteSpaces();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         return currentChar != -1;
     }
 
@@ -47,7 +54,7 @@ public class Tokenizer implements Iterator<Token>{
                         return new IdentifierToken(str);
                     }
                 }else if(Character.isWhitespace(c)){
-                    currentChar = input.read();
+                    readWhiteSpaces();
                 }else{
                     switch (c) {
                         case '(':
@@ -72,12 +79,26 @@ public class Tokenizer implements Iterator<Token>{
                         case ';':
                             currentChar = input.read();
                             return new Token(Token.TokenType.SEMICOLON);
-                        //case '<':
+                        case '<':
+                            currentChar = input.read();
+                            if(currentChar == '<'){
+                                currentChar = input.read();
+                                return new Token(Token.TokenType.LEFT_SHIFT);
+                            }else{
+                                return new Token(Token.TokenType.SMALLER);
+                            }
+                        case '>':
+                            currentChar = input.read();
+                            if(currentChar == '>'){
+                                currentChar = input.read();
+                                return new Token(Token.TokenType.RIGHT_SHIFT);
+                            }else{
+                                return new Token(Token.TokenType.GREATER);
+                            }
+                            //case '^':
                         case '=':
                             currentChar = input.read();
                             return new Token(Token.TokenType.EQUALS);
-                        /*case '>':
-                        case '^':*/
                         case '{':
                             currentChar = input.read();
                             return new Token(Token.TokenType.CURLY_BRACE_OPEN);
@@ -105,6 +126,10 @@ public class Tokenizer implements Iterator<Token>{
 
     private int readInt() throws IOException {
         return Integer.valueOf(read((c)->Character.isLetter(c)));
+    }
+
+    private void readWhiteSpaces() throws IOException {
+        read((c)->Character.isWhitespace(c));
     }
 
     private String read(Predicate<Character> test) throws IOException {

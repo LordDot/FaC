@@ -64,7 +64,15 @@ public class ExpressionParser {
     }
 
     private Expression parseLevel6(){
-        return parseLevel7();
+        if(tokens.getCurrentToken().getType() == TokenType.PLUS){
+            tokens.step();
+            return parseLevel6();
+        }else if(tokens.getCurrentToken().getType() == TokenType.MINUS){
+            tokens.step();
+            return new NegationExpression(parseLevel6());
+        }else {
+            return parseLevel7();
+        }
     }
 
     private Expression parseLevel7(){
