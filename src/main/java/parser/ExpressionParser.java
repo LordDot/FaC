@@ -1,6 +1,7 @@
 package parser;
 
 import parser.ast.*;
+import parser.types.Int;
 import tokenizer.*;
 import tokenizer.Token.TokenType;
 
@@ -30,7 +31,14 @@ public class ExpressionParser {
     }
 
     private Expression parseLevel4(){
-        return parseLevel5();
+        Expression lhs = parseLevel5();
+        while(tokens.getCurrentType() == TokenType.COMPARE ){
+            TokenType type = tokens.getCurrentType();
+            tokens.step();
+            Expression rhs = parseLevel5();
+            lhs = constructComparison(type, lhs, rhs);
+        }
+        return lhs;
     }
 
     private Expression parseLevel5(){
@@ -104,6 +112,22 @@ public class ExpressionParser {
         } else {
             throw new CompilerException("Unknown Expression");
 
+        }
+    }
+
+    private Expression<Boolean> constructComparison(TokenType operator, Expression lhs, Expression rhs){
+        if(lhs.getType().equals(new Int()) && rhs.getType().equals(new Int())){
+            return constructIntComparison(operator, lhs, rhs);
+        }else{
+            throw new CompilerException("Invalid operands for Comparison");
+        }
+    }
+
+    private Expression<Boolean> constructIntComparison(TokenType operator, Expression<Integer> lhs, Expression<Integer> rhs){
+        if(operator == TokenType.COMPARE){
+            return new CompareExpression<Integer>(lhs,rhs);
+        }else{
+            throw new CompilerException("Unknown comparison for Integers");
         }
     }
 }

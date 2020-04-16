@@ -23,6 +23,7 @@ public interface AssemblyGenerator {
         SUBTRACTION,
         MULTIPLIKATION,
         DIVISION,
-        NEGATION
+        NEGATION,
+        COMPARISON
     };
 }
