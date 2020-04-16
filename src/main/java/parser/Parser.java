@@ -1,6 +1,7 @@
 package parser;
 
 import parser.ast.*;
+import parser.types.Bool;
 import parser.types.Int;
 import parser.types.Type;
 import parser.types.Void;
@@ -189,7 +190,12 @@ public class Parser {
 
 
     private static boolean isType(Token token) {
-        return token.getType() == TokenType.KEYWORD_INT;
+        if(token.getType() == TokenType.KEYWORD_INT){
+            return true;
+        }else if(token.getType() == TokenType.KEYWORD_BOOL){
+            return true;
+        }
+        return false;
     }
 
     private Type parseType() {
@@ -197,6 +203,8 @@ public class Parser {
             return new Void();
         } else if (tokens.getCurrentToken().getType() == TokenType.KEYWORD_INT) {
             return new Int();
+        }else if(tokens.getCurrentType() == TokenType.KEYWORD_BOOL){
+            return new Bool();
         } else {
             throw new CompilerException("Function or global Variable Declaration must start with type");
         }

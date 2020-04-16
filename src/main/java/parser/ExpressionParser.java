@@ -1,10 +1,7 @@
 package parser;
 
 import parser.ast.*;
-import tokenizer.CompilerException;
-import tokenizer.IdentifierToken;
-import tokenizer.IntLiteralToken;
-import tokenizer.Token;
+import tokenizer.*;
 import tokenizer.Token.TokenType;
 
 public class ExpressionParser {
@@ -87,6 +84,10 @@ public class ExpressionParser {
             int value = ((IntLiteralToken) tokens.getCurrentToken()).getValue();
             tokens.step();
             return new IntLiteral(value);
+        }else if(tokens.getCurrentType() == TokenType.BOOLEAN_LITERAL){
+            boolean value =((BooleanLiteralToken) tokens.getCurrentToken()).getValue();
+            tokens.step();;
+            return new BoolLiteral(value);
         } else if (tokens.getCurrentToken().getType() == Token.TokenType.IDENTIFIER) {
             String name = ((IdentifierToken) tokens.getCurrentToken()).getName();
             Variable v = scoper.findVariable(name);
@@ -95,6 +96,11 @@ public class ExpressionParser {
             }
             tokens.step();
             return new VariableAccess(v);
+        }else if (tokens.getCurrentType() ==TokenType.BRACE_OPEN){
+            tokens.step();
+            Expression ret = parseLevel1();
+            tokens.expectedToken(TokenType.BRACE_CLOSE);
+            return ret;
         } else {
             throw new CompilerException("Unknown Expression");
 
