@@ -1,8 +1,8 @@
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import parser.Parser;
 import parser.Scoper;
 import parser.TokenIterator;
+import tokenizer.BooleanLiteralToken;
 import tokenizer.IdentifierToken;
 import tokenizer.IntLiteralToken;
 import tokenizer.Token;
@@ -12,7 +12,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 public class ParserTest {
     @Test
@@ -485,6 +484,303 @@ public class ParserTest {
                 "void main(){\n" +
                 "int i;\n" +
                 "i = ((1) - (1)) * (1);\n" +
+                "}\n\n";
+        compareResult(tokens, expected);
+    }
+
+    @Test
+    public void testBooleanVariable(){
+        Token[] tokens = {
+                new Token(TokenType.KEYWORD_VOID),
+                new IdentifierToken("main"),
+                new Token(TokenType.BRACE_OPEN),
+                new Token(TokenType.BRACE_CLOSE),
+                new Token(TokenType.CURLY_BRACE_OPEN),
+                new Token(TokenType.KEYWORD_BOOL),
+                new IdentifierToken("i"),
+                new Token(TokenType.EQUALS),
+                new BooleanLiteralToken(true),
+                new Token(TokenType.SEMICOLON),
+                new Token(TokenType.CURLY_BRACE_CLOSE)
+        };
+        String expected = "\n" +
+                "void main(){\n" +
+                "bool i;\n" +
+                "i = true;\n" +
+                "}\n\n";
+        compareResult(tokens, expected);
+    }
+
+    @Test
+    public void testBooleanAndOperator(){
+        Token[] tokens = {
+                new Token(TokenType.KEYWORD_VOID),
+                new IdentifierToken("main"),
+                new Token(TokenType.BRACE_OPEN),
+                new Token(TokenType.BRACE_CLOSE),
+                new Token(TokenType.CURLY_BRACE_OPEN),
+                new Token(TokenType.KEYWORD_BOOL),
+                new IdentifierToken("i"),
+                new Token(TokenType.EQUALS),
+                new BooleanLiteralToken(true),
+                new Token(TokenType.BOOLEAN_AND),
+                new BooleanLiteralToken(true),
+                new Token(TokenType.SEMICOLON),
+                new Token(TokenType.CURLY_BRACE_CLOSE)
+        };
+        String expected = "\n" +
+                "void main(){\n" +
+                "bool i;\n" +
+                "i = (true) && (true);\n" +
+                "}\n\n";
+        compareResult(tokens, expected);
+    }
+
+    @Test
+    public void testBooleanOrOperator(){
+        Token[] tokens = {
+                new Token(TokenType.KEYWORD_VOID),
+                new IdentifierToken("main"),
+                new Token(TokenType.BRACE_OPEN),
+                new Token(TokenType.BRACE_CLOSE),
+                new Token(TokenType.CURLY_BRACE_OPEN),
+                new Token(TokenType.KEYWORD_BOOL),
+                new IdentifierToken("i"),
+                new Token(TokenType.EQUALS),
+                new BooleanLiteralToken(true),
+                new Token(TokenType.BOOLEAN_OR),
+                new BooleanLiteralToken(true),
+                new Token(TokenType.SEMICOLON),
+                new Token(TokenType.CURLY_BRACE_CLOSE)
+        };
+        String expected = "\n" +
+                "void main(){\n" +
+                "bool i;\n" +
+                "i = (true) || (true);\n" +
+                "}\n\n";
+        compareResult(tokens, expected);
+    }
+
+    @Test
+    public void testBooleanNotOperator(){
+        Token[] tokens = {
+                new Token(TokenType.KEYWORD_VOID),
+                new IdentifierToken("main"),
+                new Token(TokenType.BRACE_OPEN),
+                new Token(TokenType.BRACE_CLOSE),
+                new Token(TokenType.CURLY_BRACE_OPEN),
+                new Token(TokenType.KEYWORD_BOOL),
+                new IdentifierToken("i"),
+                new Token(TokenType.EQUALS),
+                new Token(TokenType.EXCLAMATION),
+                new BooleanLiteralToken(true),
+                new Token(TokenType.SEMICOLON),
+                new Token(TokenType.CURLY_BRACE_CLOSE)
+        };
+        String expected = "\n" +
+                "void main(){\n" +
+                "bool i;\n" +
+                "i = !(true);\n" +
+                "}\n\n";
+        compareResult(tokens, expected);
+    }
+
+    @Test
+    public void testEqualsOperator(){
+        Token[] tokens = {
+                new Token(TokenType.KEYWORD_VOID),
+                new IdentifierToken("main"),
+                new Token(TokenType.BRACE_OPEN),
+                new Token(TokenType.BRACE_CLOSE),
+                new Token(TokenType.CURLY_BRACE_OPEN),
+                new Token(TokenType.KEYWORD_BOOL),
+                new IdentifierToken("i"),
+                new Token(TokenType.EQUALS),
+                new IntLiteralToken(1),
+                new Token(TokenType.COMPARE),
+                new IntLiteralToken(1),
+                new Token(TokenType.SEMICOLON),
+                new Token(TokenType.CURLY_BRACE_CLOSE)
+        };
+        String expected = "\n" +
+                "void main(){\n" +
+                "bool i;\n" +
+                "i = (1) == (1);\n" +
+                "}\n\n";
+        compareResult(tokens, expected);
+    }
+
+    @Test
+    public void testSmallerOperator(){
+        Token[] tokens = {
+                new Token(TokenType.KEYWORD_VOID),
+                new IdentifierToken("main"),
+                new Token(TokenType.BRACE_OPEN),
+                new Token(TokenType.BRACE_CLOSE),
+                new Token(TokenType.CURLY_BRACE_OPEN),
+                new Token(TokenType.KEYWORD_BOOL),
+                new IdentifierToken("i"),
+                new Token(TokenType.EQUALS),
+                new IntLiteralToken(1),
+                new Token(TokenType.SMALLER),
+                new IntLiteralToken(1),
+                new Token(TokenType.SEMICOLON),
+                new Token(TokenType.CURLY_BRACE_CLOSE)
+        };
+        String expected = "\n" +
+                "void main(){\n" +
+                "bool i;\n" +
+                "i = (1) < (1);\n" +
+                "}\n\n";
+        compareResult(tokens, expected);
+    }
+
+    @Test
+    public void testSmallerEqualsOperator(){
+        Token[] tokens = {
+                new Token(TokenType.KEYWORD_VOID),
+                new IdentifierToken("main"),
+                new Token(TokenType.BRACE_OPEN),
+                new Token(TokenType.BRACE_CLOSE),
+                new Token(TokenType.CURLY_BRACE_OPEN),
+                new Token(TokenType.KEYWORD_BOOL),
+                new IdentifierToken("i"),
+                new Token(TokenType.EQUALS),
+                new IntLiteralToken(1),
+                new Token(TokenType.SMALLER_EQUAL),
+                new IntLiteralToken(1),
+                new Token(TokenType.SEMICOLON),
+                new Token(TokenType.CURLY_BRACE_CLOSE)
+        };
+        String expected = "\n" +
+                "void main(){\n" +
+                "bool i;\n" +
+                "i = (1) <= (1);\n" +
+                "}\n\n";
+        compareResult(tokens, expected);
+    }
+
+    @Test
+    public void testGreaterOperator(){
+        Token[] tokens = {
+                new Token(TokenType.KEYWORD_VOID),
+                new IdentifierToken("main"),
+                new Token(TokenType.BRACE_OPEN),
+                new Token(TokenType.BRACE_CLOSE),
+                new Token(TokenType.CURLY_BRACE_OPEN),
+                new Token(TokenType.KEYWORD_BOOL),
+                new IdentifierToken("i"),
+                new Token(TokenType.EQUALS),
+                new IntLiteralToken(1),
+                new Token(TokenType.GREATER),
+                new IntLiteralToken(1),
+                new Token(TokenType.SEMICOLON),
+                new Token(TokenType.CURLY_BRACE_CLOSE)
+        };
+        String expected = "\n" +
+                "void main(){\n" +
+                "bool i;\n" +
+                "i = (1) > (1);\n" +
+                "}\n\n";
+        compareResult(tokens, expected);
+    }
+
+    @Test
+    public void testGreaterEqualsOperator(){
+        Token[] tokens = {
+                new Token(TokenType.KEYWORD_VOID),
+                new IdentifierToken("main"),
+                new Token(TokenType.BRACE_OPEN),
+                new Token(TokenType.BRACE_CLOSE),
+                new Token(TokenType.CURLY_BRACE_OPEN),
+                new Token(TokenType.KEYWORD_BOOL),
+                new IdentifierToken("i"),
+                new Token(TokenType.EQUALS),
+                new IntLiteralToken(1),
+                new Token(TokenType.GREATER_EQUAL),
+                new IntLiteralToken(1),
+                new Token(TokenType.SEMICOLON),
+                new Token(TokenType.CURLY_BRACE_CLOSE)
+        };
+        String expected = "\n" +
+                "void main(){\n" +
+                "bool i;\n" +
+                "i = (1) >= (1);\n" +
+                "}\n\n";
+        compareResult(tokens, expected);
+    }
+
+    @Test
+    public void testUnequalOperator(){
+        Token[] tokens = {
+                new Token(TokenType.KEYWORD_VOID),
+                new IdentifierToken("main"),
+                new Token(TokenType.BRACE_OPEN),
+                new Token(TokenType.BRACE_CLOSE),
+                new Token(TokenType.CURLY_BRACE_OPEN),
+                new Token(TokenType.KEYWORD_BOOL),
+                new IdentifierToken("i"),
+                new Token(TokenType.EQUALS),
+                new IntLiteralToken(1),
+                new Token(TokenType.NOT_EQUAL),
+                new IntLiteralToken(1),
+                new Token(TokenType.SEMICOLON),
+                new Token(TokenType.CURLY_BRACE_CLOSE)
+        };
+        String expected = "\n" +
+                "void main(){\n" +
+                "bool i;\n" +
+                "i = (1) != (1);\n" +
+                "}\n\n";
+        compareResult(tokens, expected);
+    }
+
+    @Test
+    public void testBooleanEqualOperator(){
+        Token[] tokens = {
+                new Token(TokenType.KEYWORD_VOID),
+                new IdentifierToken("main"),
+                new Token(TokenType.BRACE_OPEN),
+                new Token(TokenType.BRACE_CLOSE),
+                new Token(TokenType.CURLY_BRACE_OPEN),
+                new Token(TokenType.KEYWORD_BOOL),
+                new IdentifierToken("i"),
+                new Token(TokenType.EQUALS),
+                new BooleanLiteralToken(true),
+                new Token(TokenType.COMPARE),
+                new BooleanLiteralToken(true),
+                new Token(TokenType.SEMICOLON),
+                new Token(TokenType.CURLY_BRACE_CLOSE)
+        };
+        String expected = "\n" +
+                "void main(){\n" +
+                "bool i;\n" +
+                "i = (true) == (true);\n" +
+                "}\n\n";
+        compareResult(tokens, expected);
+    }
+
+    @Test
+    public void testBooleanUnequalOperator(){
+        Token[] tokens = {
+                new Token(TokenType.KEYWORD_VOID),
+                new IdentifierToken("main"),
+                new Token(TokenType.BRACE_OPEN),
+                new Token(TokenType.BRACE_CLOSE),
+                new Token(TokenType.CURLY_BRACE_OPEN),
+                new Token(TokenType.KEYWORD_BOOL),
+                new IdentifierToken("i"),
+                new Token(TokenType.EQUALS),
+                new BooleanLiteralToken(true),
+                new Token(TokenType.NOT_EQUAL),
+                new BooleanLiteralToken(true),
+                new Token(TokenType.SEMICOLON),
+                new Token(TokenType.CURLY_BRACE_CLOSE)
+        };
+        String expected = "\n" +
+                "void main(){\n" +
+                "bool i;\n" +
+                "i = (true) != (true);\n" +
                 "}\n\n";
         compareResult(tokens, expected);
     }

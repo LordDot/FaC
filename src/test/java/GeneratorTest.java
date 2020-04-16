@@ -2,6 +2,10 @@ import codeGeneration.FacAssemblyGenerator;
 import org.junit.jupiter.api.Test;
 import parser.Ast;
 import parser.ast.*;
+import parser.ast.Expression;
+import parser.ast.IntLiteral;
+import parser.ast.PlusExpression;
+import parser.ast.VariableAccess;
 import parser.types.Int;
 import parser.types.Void;
 

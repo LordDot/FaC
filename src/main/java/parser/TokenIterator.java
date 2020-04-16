@@ -3,6 +3,7 @@ package parser;
 import startUp.Compiler;
 import tokenizer.CompilerException;
 import tokenizer.Token;
+import tokenizer.Token.TokenType;
 
 import java.util.Iterator;
 
@@ -37,6 +38,17 @@ public class TokenIterator implements Iterator<Token> {
 
     public Token getCurrentToken(){
         return currentToken;
+    }
+
+    public Token.TokenType getCurrentType(){
+        return getCurrentToken().getType();
+    }
+
+    public void expectedToken(TokenType type) {
+        if (getCurrentType() != type) {
+            throw new CompilerException("Unexpected symbol: " + getCurrentToken().getType().toString());
+        }
+        step();
     }
 
     @Override

@@ -128,9 +128,9 @@ public class Parser {
 
     private Statement parseIfElseStatement() {
         tokens.step();
-        expectedToken(TokenType.BRACE_OPEN);
+        tokens.expectedToken(TokenType.BRACE_OPEN);
         Expression condition = expressionParser.parseExpression();
-        expectedToken(TokenType.BRACE_CLOSE);
+        tokens.expectedToken(TokenType.BRACE_CLOSE);
         List<Statement> ifStatements = parseBlock();
         List<Variable> ifScope = scoper.popScope();
         List<Statement> elseStatements;
@@ -200,12 +200,5 @@ public class Parser {
         } else {
             throw new CompilerException("Function or global Variable Declaration must start with type");
         }
-    }
-
-    private void expectedToken(TokenType type) {
-        if (tokens.getCurrentToken().getType() != type) {
-            throw new CompilerException("Unexpected symbol: " + tokens.getCurrentToken().getType().toString());
-        }
-        tokens.step();
     }
 }

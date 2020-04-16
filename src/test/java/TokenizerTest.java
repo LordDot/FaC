@@ -1,11 +1,7 @@
 import org.junit.jupiter.api.Test;
-import tokenizer.IdentifierToken;
-import tokenizer.IntLiteralToken;
-import tokenizer.Token;
+import tokenizer.*;
 import tokenizer.Token.TokenType;
-import tokenizer.Tokenizer;
 
-import javax.swing.text.StyleContext;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
@@ -33,6 +29,13 @@ public class TokenizerTest {
                 new Token(TokenType.CURLY_BRACE_CLOSE)
         };
 
+        testString(s, result);
+    }
+
+    @Test
+    void testMultiDigitInt() throws IOException {
+        String s = "12";
+        Token[] result = {new IntLiteralToken(12)};
         testString(s, result);
     }
 
@@ -88,4 +91,38 @@ public class TokenizerTest {
         testString(program, result);
     }
 
+    @Test
+    public void testBooleanLiterals() throws IOException {
+        String program = "true false";
+        Token[] result = {new BooleanLiteralToken(true), new BooleanLiteralToken(false)};
+        testString(program, result);
+    }
+
+    @Test
+    public void testBoolKeyWord() throws IOException {
+        String program = "bool";
+        Token[] result = {new Token(TokenType.KEYWORD_BOOL)};
+        testString(program, result);
+    }
+
+    @Test
+    public void testBooleanOperator() throws IOException {
+        String program = "&& ! ||";
+        Token[] result = {new Token(TokenType.BOOLEAN_AND), new Token(TokenType.EXCLAMATION), new Token(TokenType.BOOLEAN_OR)};
+        testString(program, result);
+    }
+
+    @Test
+    public void testCompareOperators() throws IOException {
+        String program = "< > <= >= == !=";
+        Token[] result = {new Token(TokenType.SMALLER), new Token(TokenType.GREATER), new Token(TokenType.SMALLER_EQUAL), new Token(TokenType.GREATER_EQUAL), new Token(TokenType.COMPARE), new Token(TokenType.NOT_EQUAL)};
+        testString(program, result);
+    }
+
+    @Test
+    public void testUnknownSymbol() throws IOException {
+        String program = new String(new int[]{0x1F60D}, 0, 1);
+        Tokenizer tokenizer = new Tokenizer(new StringReader(program));
+        assertThrows(CompilerException.class, ()->tokenizer.next());
+    }
 }

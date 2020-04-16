@@ -48,8 +48,14 @@ public class Tokenizer implements Iterator<Token>{
                         return new Token(Token.TokenType.KEYWORD_RETURN);
                     }else if(str.equals("if")){
                         return new Token(Token.TokenType.KEYWORD_IF);
-                    }else if(str.equals("else")){
+                    }else if(str.equals("else")) {
                         return new Token(Token.TokenType.KEYWORD_ELSE);
+                    }else if(str.equals("bool")) {
+                        return new Token(Token.TokenType.KEYWORD_BOOL);
+                    }else if(str.equals("true")) {
+                        return new BooleanLiteralToken(true);
+                    } else if (str.equals("false")) {
+                        return new BooleanLiteralToken(false);
                     }else{
                         return new IdentifierToken(str);
                     }
@@ -66,7 +72,30 @@ public class Tokenizer implements Iterator<Token>{
                         case '*':
                             currentChar = input.read();
                             return new Token(Token.TokenType.STAR);
-                        //case '!':
+                        case '!':
+                            currentChar = input.read();
+                            if(currentChar == '='){
+                                currentChar = input.read();
+                                return new Token(Token.TokenType.NOT_EQUAL);
+                            }else{
+                                return new Token(Token.TokenType.EXCLAMATION);
+                            }
+                        case '&':
+                            currentChar = input.read();
+                            if(currentChar == '&'){
+                                currentChar = input.read();
+                                return new Token(Token.TokenType.BOOLEAN_AND);
+                            }else {
+                                throw new CompilerException("& Expected");
+                            }
+                        case '|':
+                            currentChar = input.read();
+                            if(currentChar == '|'){
+                                currentChar = input.read();
+                                return new Token(Token.TokenType.BOOLEAN_OR);
+                            }else{
+                                throw new CompilerException("| Expected");
+                            }
                         case '+':
                             currentChar = input.read();
                             return new Token(Token.TokenType.PLUS);
@@ -81,30 +110,43 @@ public class Tokenizer implements Iterator<Token>{
                             return new Token(Token.TokenType.SEMICOLON);
                         case '<':
                             currentChar = input.read();
-                            if(currentChar == '<'){
+                            if(currentChar == '<') {
                                 currentChar = input.read();
                                 return new Token(Token.TokenType.LEFT_SHIFT);
+                            }else if(currentChar == '='){
+                                currentChar = input.read();
+                                return new Token(Token.TokenType.SMALLER_EQUAL);
                             }else{
                                 return new Token(Token.TokenType.SMALLER);
                             }
                         case '>':
                             currentChar = input.read();
-                            if(currentChar == '>'){
+                            if(currentChar == '>') {
                                 currentChar = input.read();
                                 return new Token(Token.TokenType.RIGHT_SHIFT);
+                            }else if(currentChar == '='){
+                                currentChar = input.read();
+                                return new Token(Token.TokenType.GREATER_EQUAL);
                             }else{
                                 return new Token(Token.TokenType.GREATER);
                             }
                             //case '^':
                         case '=':
                             currentChar = input.read();
-                            return new Token(Token.TokenType.EQUALS);
+                            if(currentChar == '='){
+                                currentChar = input.read();
+                                return new Token(Token.TokenType.COMPARE);
+                            }else {
+                                return new Token(Token.TokenType.EQUALS);
+                            }
                         case '{':
                             currentChar = input.read();
                             return new Token(Token.TokenType.CURLY_BRACE_OPEN);
                         case '}':
                             currentChar = input.read();
                             return new Token(Token.TokenType.CURLY_BRACE_CLOSE);
+                        default:
+                            throw new CompilerException("Unknown character");
                     }
                 }
                 if (currentChar == -1) {
@@ -125,7 +167,7 @@ public class Tokenizer implements Iterator<Token>{
     }
 
     private int readInt() throws IOException {
-        return Integer.valueOf(read((c)->Character.isLetter(c)));
+        return Integer.valueOf(read((c)->Character.isDigit(c)));
     }
 
     private void readWhiteSpaces() throws IOException {

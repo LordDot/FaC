@@ -1,6 +1,5 @@
 package parser;
 
-import codeGeneration.AssemblyGenerator.Operation;
 import parser.ast.*;
 import tokenizer.CompilerException;
 import tokenizer.IdentifierToken;
@@ -29,16 +28,20 @@ public class ExpressionParser {
         return parseLevel3();
     }
 
-    private Expression parseLevel3(){
+    private Expression parseLevel3() {
         return parseLevel4();
     }
 
     private Expression parseLevel4(){
-        Expression lhs = parseLevel5();
+        return parseLevel5();
+    }
+
+    private Expression parseLevel5(){
+        Expression lhs = parseLevel6();
         while(tokens.getCurrentToken().getType() == TokenType.PLUS || tokens.getCurrentToken().getType() == TokenType.MINUS){
             TokenType type = tokens.getCurrentToken().getType();
             tokens.step();
-            Expression rhs = parseLevel5();
+            Expression rhs = parseLevel6();
             if (type == TokenType.PLUS) {
                 lhs = new PlusExpression(lhs, rhs);
             }else if(type == TokenType.MINUS){
@@ -48,12 +51,12 @@ public class ExpressionParser {
         return lhs;
     }
 
-    private Expression parseLevel5(){
-        Expression lhs =  parseLevel6();
+    private Expression parseLevel6(){
+        Expression lhs =  parseLevel7();
         while(tokens.getCurrentToken().getType() == TokenType.STAR || tokens.getCurrentToken().getType() == TokenType.SLASH){
             TokenType type = tokens.getCurrentToken().getType();
             tokens.step();
-            Expression rhs = parseLevel6();
+            Expression rhs = parseLevel7();
             if(type == TokenType.STAR){
                 lhs = new MultiplicationExpression(lhs, rhs);
             }else if(type == TokenType.SLASH){
@@ -63,23 +66,23 @@ public class ExpressionParser {
         return lhs;
     }
 
-    private Expression parseLevel6(){
+    private Expression parseLevel7(){
         if(tokens.getCurrentToken().getType() == TokenType.PLUS){
             tokens.step();
-            return parseLevel6();
+            return parseLevel7();
         }else if(tokens.getCurrentToken().getType() == TokenType.MINUS){
             tokens.step();
-            return new NegationExpression(parseLevel6());
+            return new NegationExpression(parseLevel7());
         }else {
-            return parseLevel7();
+            return parseLevel8();
         }
     }
 
-    private Expression parseLevel7(){
-        return parseLevel8();
+    private Expression parseLevel8(){
+        return parseLevel9();
     }
 
-    private Expression parseLevel8() {
+    private Expression parseLevel9() {
         if (tokens.getCurrentToken().getType() == Token.TokenType.INT_LITERAL) {
             int value = ((IntLiteralToken) tokens.getCurrentToken()).getValue();
             tokens.step();
