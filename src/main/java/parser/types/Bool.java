@@ -1,6 +1,6 @@
 package parser.types;
 
-public class Bool implements Type {
+public class Bool extends Type {
     @Override
     public String toString() {
         return "bool";
