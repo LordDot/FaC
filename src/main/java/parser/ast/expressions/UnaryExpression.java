@@ -1,7 +1,8 @@
-package parser.ast;
+package parser.ast.expressions;
 
 import codeGeneration.AssemblyGenerator;
 import codeGeneration.AssemblyGenerator.Operation;
+import parser.ast.expressions.Expression;
 
 public abstract class UnaryExpression<R,T> extends Expression<R> {
     private Expression<T> operand;

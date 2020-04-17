@@ -1,10 +1,12 @@
-package parser.ast;
+package parser.ast.expressions.integer;
 
 import codeGeneration.AssemblyGenerator.Operation;
+import parser.ast.expressions.Expression;
+import parser.ast.expressions.BinaryExpression;
 import parser.types.Int;
 import parser.types.Type;
 
-public class DivisionExpression extends BinaryExpression<Integer, Integer, Integer>{
+public class DivisionExpression extends BinaryExpression<Integer, Integer, Integer> {
     public DivisionExpression(Expression<Integer> lhs, Expression<Integer> rhs) {
         super(lhs, rhs, Operation.DIVISION);
     }

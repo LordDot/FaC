@@ -1,9 +1,9 @@
-package parser.ast;
+package parser.ast.expressions;
 
 import codeGeneration.AssemblyGenerator;
 import codeGeneration.AssemblyGenerator.Operation;
 
-public abstract class BinaryExpression<R,T1,T2> extends Expression<R>{
+public abstract class BinaryExpression<R,T1,T2> extends Expression<R> {
     private Expression<T1> lhs;
     private Expression<T2> rhs;
     private Operation operation;

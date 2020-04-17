@@ -1,17 +1,19 @@
-package parser.ast;
+package parser.ast.expressions.bool;
 
 import codeGeneration.AssemblyGenerator.Operation;
+import parser.ast.expressions.BinaryExpression;
+import parser.ast.expressions.Expression;
 import parser.types.Bool;
 import parser.types.Type;
 
-public class CompareExpression<T> extends BinaryExpression<Boolean, T, T>{
-    public CompareExpression(Expression<T> lhs, Expression<T> rhs) {
-        super(lhs, rhs, Operation.COMPARISON);
+public class UnequalExpression<T> extends BinaryExpression<Boolean, T, T> {
+    public UnequalExpression(Expression<T> lhs, Expression<T> rhs) {
+        super(lhs, rhs, Operation.UNEQUAL);
     }
 
     @Override
     protected String getOperator() {
-        return "==";
+        return "!=";
     }
 
     @Override

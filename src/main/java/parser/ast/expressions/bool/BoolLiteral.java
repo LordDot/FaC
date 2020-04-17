@@ -1,10 +1,11 @@
-package parser.ast;
+package parser.ast.expressions.bool;
 
 import codeGeneration.AssemblyGenerator;
+import parser.ast.expressions.Expression;
 import parser.types.Bool;
 import parser.types.Type;
 
-public class BoolLiteral extends Expression<Boolean>{
+public class BoolLiteral extends Expression<Boolean> {
     boolean value;
 
     public BoolLiteral(boolean value) {

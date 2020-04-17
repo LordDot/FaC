@@ -1,10 +1,11 @@
-package parser.ast;
+package parser.ast.expressions.integer;
 
 import codeGeneration.AssemblyGenerator;
+import parser.ast.expressions.Expression;
 import parser.types.Int;
 import parser.types.Type;
 
-public class IntLiteral extends Expression<Integer>{
+public class IntLiteral extends Expression<Integer> {
     private int value;
 
     public IntLiteral(int value) {

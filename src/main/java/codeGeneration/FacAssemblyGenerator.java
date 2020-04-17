@@ -1,6 +1,6 @@
 package codeGeneration;
 
-import parser.ast.Expression;
+import parser.ast.expressions.Expression;
 import tokenizer.CompilerException;
 
 import java.util.*;

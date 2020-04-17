@@ -1,9 +1,6 @@
 package codeGeneration;
 
-import parser.ast.Expression;
-import parser.ast.Variable;
-
-import java.util.List;
+import parser.ast.expressions.Expression;
 
 public interface AssemblyGenerator {
     void pushScope();

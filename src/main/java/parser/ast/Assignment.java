@@ -1,6 +1,7 @@
 package parser.ast;
 
 import codeGeneration.AssemblyGenerator;
+import parser.ast.expressions.Expression;
 
 public class Assignment extends Statement{
     private Variable target;

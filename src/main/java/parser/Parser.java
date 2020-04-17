@@ -1,13 +1,13 @@
 package parser;
 
 import parser.ast.*;
+import parser.ast.expressions.Expression;
 import parser.types.Bool;
 import parser.types.Int;
 import parser.types.Type;
 import parser.types.Void;
 import tokenizer.CompilerException;
 import tokenizer.IdentifierToken;
-import tokenizer.IntLiteralToken;
 import tokenizer.Token;
 import tokenizer.Token.TokenType;
 

@@ -1,4 +1,4 @@
-package parser.ast;
+package parser.ast.expressions;
 
 import codeGeneration.AssemblyGenerator;
 import parser.types.Type;

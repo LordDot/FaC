@@ -1,6 +1,8 @@
-package parser.ast;
+package parser.ast.expressions;
 
 import codeGeneration.AssemblyGenerator;
+import parser.ast.Variable;
+import parser.ast.expressions.Expression;
 import parser.types.Type;
 
 public class VariableAccess extends Expression<Integer> {
