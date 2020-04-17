@@ -24,6 +24,11 @@ public interface AssemblyGenerator {
         MULTIPLIKATION,
         DIVISION,
         NEGATION,
-        COMPARISON
+        COMPARISON,
+        UNEQUAL,
+        SMALLER,
+        SMALLER_EQUALS,
+        GREATER,
+        GREATER_EQUALS
     };
 }
