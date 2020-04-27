@@ -28,5 +28,5 @@ Operations:
 
 jumps:
   unconditional: J1, O address
-  conditional: J2, D address, O>0 (alu output)
+  conditional: J2, D address, O!=0 (alu output)
   

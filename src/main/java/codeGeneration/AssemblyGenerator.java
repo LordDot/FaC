@@ -2,6 +2,8 @@ package codeGeneration;
 
 import parser.ast.expressions.Expression;
 
+import java.util.function.IntConsumer;
+
 public interface AssemblyGenerator {
     void pushScope();
     void popScope();
@@ -14,6 +16,9 @@ public interface AssemblyGenerator {
     int getFreeAddress();
     void generateUnaryOperation(Operation operation, int into, int operandAddress);
     void generateBinaryOperation(Operation op, int into, int lhs, int rhs);
+    IntConsumer generateJump();
+    IntConsumer generateConditionalJump(Expression condition);
+    int getCurrentProgramAddress();
 
     public enum Operation {
         ADDITION,

@@ -90,7 +90,7 @@ public class GeneratorTest {
         Ast ast = new Ast();
         Variable variable = new Variable("i", new Int());
         Function function = new Function("name", new Void(), Collections.singletonList(variable));
-        Expression condition = new IntLiteral(1);
+        Expression condition = new BoolLiteral(true);
         List<Statement> ifStatements = new LinkedList<>();
         ifStatements.add(new Assignment(variable, new IntLiteral(1)));
         List<Statement> elseStatements = new LinkedList<>();
@@ -109,9 +109,9 @@ public class GeneratorTest {
         expected.add(command1);
 
         Map<String, Integer> command2 = new HashMap<>();
-        command2.put("A", 0);
+        command2.put("A", 1);
         command2.put("2", 0);
-        command2.put("red splitter",1);
+        command2.put("fast inserter",1);
         command2.put("J", 2);
         command2.put("D", 4);
         expected.add(command2);
@@ -138,6 +138,7 @@ public class GeneratorTest {
 
         assertEquals(expected,generator.getGeneratedAssembly());
     }
+
 
     @Test
     public void testVariableRead(){

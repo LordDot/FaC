@@ -3,7 +3,9 @@ package parser.ast;
 import codeGeneration.AssemblyGenerator;
 import parser.ast.expressions.Expression;
 
+import javax.swing.plaf.nimbus.State;
 import java.util.List;
+import java.util.function.IntConsumer;
 
 public class IfStatement extends Statement {
     private Expression condition;
@@ -42,6 +44,17 @@ public class IfStatement extends Statement {
 
     @Override
     public void generateAssembly(AssemblyGenerator assGen) {
-
+        IntConsumer conditionJump = assGen.generateConditionalJump(condition);
+        IntConsumer jumpToElse = assGen.generateJump();
+        conditionJump.accept(assGen.getCurrentProgramAddress());
+        for(Statement s : ifStatements){
+            s.generateAssembly(assGen);
+        }
+        IntConsumer jumpToEnd = assGen.generateJump();
+        jumpToElse.accept(assGen.getCurrentProgramAddress());
+        for(Statement s : elseStatements){
+            s.generateAssembly(assGen);
+        }
+        jumpToEnd.accept(assGen.getCurrentProgramAddress());
     }
 }

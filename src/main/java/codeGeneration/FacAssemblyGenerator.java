@@ -1,10 +1,10 @@
 package codeGeneration;
 
 import parser.ast.expressions.Expression;
-import parser.types.Int;
 import tokenizer.CompilerException;
 
 import java.util.*;
+import java.util.function.IntConsumer;
 
 public class FacAssemblyGenerator implements AssemblyGenerator{
     public static Map<AssemblyGenerator.Operation, FacOperation> operationMapping = new HashMap<>();
@@ -64,6 +64,33 @@ public class FacAssemblyGenerator implements AssemblyGenerator{
         command.put("R", into);
         command.put(operationMapping.get(op).getOpCode(), 1);
         generatedAssembly.add(command);
+    }
+
+    @Override
+    public IntConsumer generateJump() {
+        Map<String, Integer> command = new HashMap<>();
+        command.put("J", 1);
+        generatedAssembly.add(command);
+        return (int i)->command.put("O", i);
+    }
+
+    @Override
+    public IntConsumer generateConditionalJump(Expression condition) {
+        int conditionAddress = getFreeAddress();
+        condition.generateAssembly(this, conditionAddress);
+
+        Map<String, Integer> command = new HashMap<>();
+        command.put("J",2);
+        command.put("fast inserter",1);
+        command.put("A", conditionAddress);
+        command.put("2", 0);
+        generatedAssembly.add(command);
+        return (int i)->command.put("D", i);
+    }
+
+    @Override
+    public int getCurrentProgramAddress() {
+        return generatedAssembly.size() + 1;
     }
 
     @Override
