@@ -3,9 +3,15 @@ import org.junit.jupiter.api.Test;
 import parser.Ast;
 import parser.ast.*;
 import parser.ast.expressions.Expression;
+import parser.ast.expressions.bool.AndExpression;
+import parser.ast.expressions.bool.BoolLiteral;
+import parser.ast.expressions.bool.NotExpression;
+import parser.ast.expressions.bool.OrExpression;
 import parser.ast.expressions.integer.IntLiteral;
+import parser.ast.expressions.integer.NegationExpression;
 import parser.ast.expressions.integer.PlusExpression;
 import parser.ast.expressions.VariableAccess;
+import parser.types.Bool;
 import parser.types.Int;
 import parser.types.Void;
 
@@ -164,6 +170,35 @@ public class GeneratorTest {
     }
 
     @Test
+    public void testNegation(){
+        Ast ast = new Ast();
+        List<Variable> scope = new LinkedList<>();
+        Variable i = new Variable("i", new Int());
+        scope.add(i);
+        Function f = new Function("main", new Void(), scope);
+        f.addStatement(new Assignment(i, new NegationExpression(new IntLiteral(2))));
+        ast.addFunction(f);
+
+        FacAssemblyGenerator generator = new FacAssemblyGenerator(0);
+        ast.generateAssembly(generator);
+
+        List<Map<String,Integer>> expected = new LinkedList<>();
+        Map<String, Integer> command1 = new HashMap<>();
+        command1.put("R", 1);
+        command1.put("O", 2);
+        expected.add(command1);
+
+        Map<String, Integer> command2 = new HashMap<>();
+        command2.put("R", 0);
+        command2.put("1", 0);
+        command2.put("B", 1);
+        command2.put("tank", 1);
+        expected.add(command2);
+
+        assertEquals(expected,generator.getGeneratedAssembly());
+    }
+
+    @Test
     public void testAddition(){
         Ast ast = new Ast();
         Variable i = new Variable("i", new Int());
@@ -194,5 +229,146 @@ public class GeneratorTest {
         expected.add(command3);
 
         assertEquals(expected, generator.getGeneratedAssembly());
+    }
+
+    @Test
+    public void testBooleanFalse(){
+        Ast ast = new Ast();
+        List<Variable> scope = new LinkedList<>();
+        Variable b = new Variable("b", new Bool());
+        scope.add(b);
+        Function f = new Function("main", new Void(), scope);
+        f.addStatement(new Assignment(b, new BoolLiteral(false)));
+        ast.addFunction(f);
+
+        FacAssemblyGenerator generator = new FacAssemblyGenerator(0);
+        ast.generateAssembly(generator);
+
+        List<Map<String,Integer>> expected = new LinkedList<>();
+        Map<String, Integer> command1 = new HashMap<>();
+        command1.put("R", 0);
+        command1.put("O", 0);
+        expected.add(command1);
+
+        assertEquals(expected,generator.getGeneratedAssembly());
+    }
+
+    @Test
+    public void testBooleanTrue(){
+        Ast ast = new Ast();
+        List<Variable> scope = new LinkedList<>();
+        Variable b = new Variable("b", new Bool());
+        scope.add(b);
+        Function f = new Function("main", new Void(), scope);
+        f.addStatement(new Assignment(b, new BoolLiteral(true)));
+        ast.addFunction(f);
+
+        FacAssemblyGenerator generator = new FacAssemblyGenerator(0);
+        ast.generateAssembly(generator);
+
+        List<Map<String,Integer>> expected = new LinkedList<>();
+        Map<String, Integer> command1 = new HashMap<>();
+        command1.put("R", 0);
+        command1.put("O", 1);
+        expected.add(command1);
+
+        assertEquals(expected,generator.getGeneratedAssembly());
+    }
+
+    @Test
+    public void testBooleanAnd(){
+        Ast ast = new Ast();
+        List<Variable> scope = new LinkedList<>();
+        Variable b = new Variable("b", new Bool());
+        scope.add(b);
+        Function f = new Function("main", new Void(), scope);
+        f.addStatement(new Assignment(b, new AndExpression(new BoolLiteral(false), new BoolLiteral(true))));
+        ast.addFunction(f);
+
+        FacAssemblyGenerator generator = new FacAssemblyGenerator(0);
+        ast.generateAssembly(generator);
+
+        List<Map<String,Integer>> expected = new LinkedList<>();
+        Map<String, Integer> command1 = new HashMap<>();
+        command1.put("R", 1);
+        command1.put("O", 0);
+        expected.add(command1);
+
+        Map<String, Integer> command2 = new HashMap<>();
+        command2.put("R", 2);
+        command2.put("O", 1);
+        expected.add(command2);
+
+        Map<String, Integer> command3 = new HashMap<>();
+        command3.put("R", 0);
+        command3.put("A", 1);
+        command3.put("B", 2);
+        command3.put("wooden chest", 1);
+        expected.add(command3);
+
+        assertEquals(expected,generator.getGeneratedAssembly());
+    }
+
+    @Test
+    public void testBooleanOr(){
+        Ast ast = new Ast();
+        List<Variable> scope = new LinkedList<>();
+        Variable b = new Variable("b", new Bool());
+        scope.add(b);
+        Function f = new Function("main", new Void(), scope);
+        f.addStatement(new Assignment(b, new OrExpression(new BoolLiteral(false), new BoolLiteral(true))));
+        ast.addFunction(f);
+
+        FacAssemblyGenerator generator = new FacAssemblyGenerator(0);
+        ast.generateAssembly(generator);
+
+        List<Map<String,Integer>> expected = new LinkedList<>();
+        Map<String, Integer> command1 = new HashMap<>();
+        command1.put("R", 1);
+        command1.put("O", 0);
+        expected.add(command1);
+
+        Map<String, Integer> command2 = new HashMap<>();
+        command2.put("R", 2);
+        command2.put("O", 1);
+        expected.add(command2);
+
+        Map<String, Integer> command3 = new HashMap<>();
+        command3.put("R", 0);
+        command3.put("A", 1);
+        command3.put("B", 2);
+        command3.put("steel chest", 1);
+        expected.add(command3);
+
+        assertEquals(expected,generator.getGeneratedAssembly());
+    }
+
+    @Test
+    public void testBooleanNot(){
+        Ast ast = new Ast();
+        List<Variable> scope = new LinkedList<>();
+        Variable b = new Variable("b", new Bool());
+        scope.add(b);
+        Function f = new Function("main", new Void(), scope);
+        f.addStatement(new Assignment(b, new NotExpression(new BoolLiteral(false))));
+        ast.addFunction(f);
+
+        FacAssemblyGenerator generator = new FacAssemblyGenerator(0);
+        ast.generateAssembly(generator);
+
+        List<Map<String,Integer>> expected = new LinkedList<>();
+        Map<String, Integer> command1 = new HashMap<>();
+        command1.put("R", 1);
+        command1.put("O", 0);
+        expected.add(command1);
+
+        Map<String, Integer> command2 = new HashMap<>();
+        command2.put("R", 0);
+        command2.put("A", 1);
+        command2.put("2", 0);
+        command2.put("fast inserter", 1);
+        expected.add(command2);
+
+        assertEquals(expected,generator.getGeneratedAssembly());
     }
 }

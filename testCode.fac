@@ -1,3 +1,11 @@
 void main(){
   int i = 2;
+  int k = i + 3;
+  int mult = i * k;
+  i = mult / 3;
+
+  bool b = true;
+  b = b && false;
+  bool c = !b;
+  c = b || c;
 }

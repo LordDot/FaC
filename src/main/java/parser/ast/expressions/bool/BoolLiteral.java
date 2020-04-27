@@ -2,6 +2,7 @@ package parser.ast.expressions.bool;
 
 import codeGeneration.AssemblyGenerator;
 import parser.ast.expressions.Expression;
+import parser.ast.expressions.integer.IntLiteral;
 import parser.types.Bool;
 import parser.types.Type;
 
@@ -29,7 +30,7 @@ public class BoolLiteral extends Expression<Boolean> {
 
     @Override
     public void generateAssembly(AssemblyGenerator generator, int into) {
-        throw new RuntimeException("Not implemented");
+        generator.generateAssignment(into, new IntLiteral(value?1:0));
     }
 
     @Override

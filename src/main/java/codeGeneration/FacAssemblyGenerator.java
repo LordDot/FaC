@@ -1,6 +1,7 @@
 package codeGeneration;
 
 import parser.ast.expressions.Expression;
+import parser.types.Int;
 import tokenizer.CompilerException;
 
 import java.util.*;
@@ -12,6 +13,8 @@ public class FacAssemblyGenerator implements AssemblyGenerator{
         operationMapping.put(Operation.SUBTRACTION,new FacOperation("tank"));
         operationMapping.put(Operation.MULTIPLICATION,new FacOperation("wooden chest"));
         operationMapping.put(Operation.DIVISION,new FacOperation("iron chest"));
+        operationMapping.put(Operation.NEGATION, new FacOperation("tank", false, 0));
+        operationMapping.put(Operation.BOOL_NOT, new FacOperation("fast inserter", true, 0));
     }
 
     private Stack<Map<String,Integer>> scopes;
@@ -39,7 +42,18 @@ public class FacAssemblyGenerator implements AssemblyGenerator{
 
     @Override
     public void generateUnaryOperation(Operation operation, int into, int operandAddress) {
-        throw new RuntimeException("NotImplemented yet!");
+        Map<String, Integer> command = new HashMap<>();
+        FacOperation operator = operationMapping.get(operation);
+        command.put(operator.getOpCode(), 1);
+        if(operator.isLhs()){
+            command.put("A", operandAddress);
+            command.put("2", operator.getOtherSide());
+        }else{
+            command.put("1", operator.getOtherSide());
+            command.put("B", operandAddress);
+        }
+        command.put("R", into);
+        generatedAssembly.add(command);
     }
 
     @Override
@@ -71,7 +85,8 @@ public class FacAssemblyGenerator implements AssemblyGenerator{
     @Override
     public void declareFunction(String name) {
         functionAdresses.put(name,generatedAssembly.size());
-        generateSaveVariablesOnStack(0);
+        //TODO
+        //generateSaveVariablesOnStack(0);
     }
 
     @Override
@@ -110,7 +125,7 @@ public class FacAssemblyGenerator implements AssemblyGenerator{
     }
 
     private void generateSaveVariablesOnStack(int number){
-        //TODO
+        throw new RuntimeException("Not Implemented");
     }
 
     private Integer lookupVariable(String variableName) {
@@ -124,15 +139,31 @@ public class FacAssemblyGenerator implements AssemblyGenerator{
         return null;
     }
 
-    private class FacOperation{
+    private static class FacOperation{
         private String opCode;
+        private boolean lhs;
+        private int otherSide;
 
         public FacOperation(String opCode) {
             this.opCode = opCode;
         }
 
+        public FacOperation(String opCode, boolean lhs, int otherSide) {
+            this.opCode = opCode;
+            this.lhs = lhs;
+            this.otherSide = otherSide;
+        }
+
         public String getOpCode() {
             return opCode;
+        }
+
+        public boolean isLhs() {
+            return lhs;
+        }
+
+        public int getOtherSide() {
+            return otherSide;
         }
     }
 }

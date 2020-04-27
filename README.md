@@ -47,3 +47,12 @@
 
 ### Level 1
 - `?:`
+
+
+## Booleans
+
+- 0: false
+- everthing else: true
+- &&: *
+- ||: +
+

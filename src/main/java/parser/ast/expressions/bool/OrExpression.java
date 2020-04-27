@@ -8,7 +8,7 @@ import parser.types.Type;
 
 public class OrExpression extends BinaryExpression<Boolean, Boolean, Boolean> {
     public OrExpression(Expression<Boolean> lhs, Expression<Boolean> rhs) {
-        super(lhs, rhs, Operation.BOOL_OR);
+        super(lhs, rhs, Operation.ADDITION);
     }
 
     @Override

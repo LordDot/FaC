@@ -28,7 +28,5 @@ public interface AssemblyGenerator {
         GREATER,
         GREATER_EQUALS,
         BOOL_NOT,
-        BOOL_AND,
-        BOOL_OR,
     };
 }

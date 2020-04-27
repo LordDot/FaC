@@ -8,7 +8,7 @@ import parser.types.Type;
 
 public class AndExpression extends BinaryExpression<Boolean, Boolean, Boolean> {
     public AndExpression(Expression<Boolean> lhs, Expression<Boolean> rhs) {
-        super(lhs, rhs, Operation.BOOL_AND);
+        super(lhs, rhs, Operation.MULTIPLICATION);
     }
 
     @Override
