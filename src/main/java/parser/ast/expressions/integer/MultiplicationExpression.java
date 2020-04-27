@@ -8,7 +8,7 @@ import parser.types.Type;
 
 public class MultiplicationExpression extends BinaryExpression<Integer, Integer, Integer> {
     public MultiplicationExpression(Expression lhs, Expression rhs) {
-        super(lhs, rhs, Operation.MULTIPLIKATION);
+        super(lhs, rhs, Operation.MULTIPLICATION);
     }
 
     @Override

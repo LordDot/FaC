@@ -10,7 +10,7 @@ public class FacAssemblyGenerator implements AssemblyGenerator{
     {
         operationMapping.put(Operation.ADDITION,new FacOperation("steel chest"));
         operationMapping.put(Operation.SUBTRACTION,new FacOperation("tank"));
-        operationMapping.put(Operation.MULTIPLIKATION,new FacOperation("wooden chest"));
+        operationMapping.put(Operation.MULTIPLICATION,new FacOperation("wooden chest"));
         operationMapping.put(Operation.DIVISION,new FacOperation("iron chest"));
     }
 

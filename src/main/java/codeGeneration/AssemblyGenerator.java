@@ -18,7 +18,7 @@ public interface AssemblyGenerator {
     public enum Operation {
         ADDITION,
         SUBTRACTION,
-        MULTIPLIKATION,
+        MULTIPLICATION,
         DIVISION,
         NEGATION,
         COMPARISON,
@@ -26,6 +26,9 @@ public interface AssemblyGenerator {
         SMALLER,
         SMALLER_EQUALS,
         GREATER,
-        GREATER_EQUALS
+        GREATER_EQUALS,
+        BOOL_NOT,
+        BOOL_AND,
+        BOOL_OR,
     };
 }

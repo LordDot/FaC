@@ -28,11 +28,28 @@ public class ExpressionParser {
     }
 
     private Expression parseLevel2(){
-        return parseLevel3();
+        Expression lhs = parseLevel3();
+        while(tokens.getCurrentType() == TokenType.BOOLEAN_AND || tokens.getCurrentType() == TokenType.BOOLEAN_OR){
+            if(tokens.getCurrentType() == TokenType.BOOLEAN_AND){
+                tokens.step();
+                Expression rhs = parseLevel3();
+                lhs = new AndExpression(lhs, rhs);
+            }else if(tokens.getCurrentType() == TokenType.BOOLEAN_OR){
+                tokens.step();
+                Expression rhs = parseLevel3();
+                lhs = new OrExpression(lhs,rhs);
+            }
+        }
+        return lhs;
     }
 
     private Expression parseLevel3() {
-        return parseLevel4();
+        if(tokens.getCurrentType() == TokenType.EXCLAMATION){
+            tokens.step();
+            return new NotExpression(parseLevel3());
+        }else {
+            return parseLevel4();
+        }
     }
 
     private Expression parseLevel4(){
