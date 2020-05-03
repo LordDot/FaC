@@ -193,6 +193,48 @@ public class ParserTest {
     }
 
     @Test
+    public void ifElseScopes(){
+        Token[] tokens = {
+                new Token(TokenType.KEYWORD_VOID),
+                new IdentifierToken("main"),
+                new Token(TokenType.BRACE_OPEN),
+                new Token(TokenType.BRACE_CLOSE),
+                new Token(TokenType.CURLY_BRACE_OPEN),
+                new Token(TokenType.KEYWORD_IF),
+                new Token(TokenType.BRACE_OPEN),
+                new IntLiteralToken(1),
+                new Token(TokenType.BRACE_CLOSE),
+                new Token(TokenType.CURLY_BRACE_OPEN),
+                new Token(TokenType.KEYWORD_INT),
+                new IdentifierToken("i"),
+                new Token(TokenType.EQUALS),
+                new IntLiteralToken(0),
+                new Token(TokenType.SEMICOLON),
+                new Token(TokenType.CURLY_BRACE_CLOSE),
+                new Token(TokenType.KEYWORD_ELSE),
+                new Token(TokenType.CURLY_BRACE_OPEN),
+                new Token(TokenType.KEYWORD_INT),
+                new IdentifierToken("i"),
+                new Token(TokenType.EQUALS),
+                new IntLiteralToken(1),
+                new Token(TokenType.SEMICOLON),
+                new Token(TokenType.CURLY_BRACE_CLOSE),
+                new Token(TokenType.CURLY_BRACE_CLOSE),
+        };
+        String expected = "\n" +
+                "void main(){\n" +
+                "if(1) {\n" +
+                "int i;\n" +
+                "i = 0;\n" +
+                "} else {\n" +
+                "int i;\n" +
+                "i = 1;\n" +
+                "}\n" +
+                "}\n\n";
+        compareResult(tokens, expected);
+    }
+
+    @Test
     public void testVariableAccess() {
         Token[] tokens = {
                 new Token(TokenType.KEYWORD_VOID),

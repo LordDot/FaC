@@ -35,6 +35,9 @@ public class IfStatement extends Statement {
             builder.append(s.toPrettyString());
         }
         builder.append("\n} else {\n");
+        for(Variable v : elseScope){
+            builder.append(v.toPrettyString() + "\n");
+        }
         for(Statement s : elseStatements){
             builder.append(s.toPrettyString());
         }
@@ -47,11 +50,20 @@ public class IfStatement extends Statement {
         IntConsumer conditionJump = assGen.generateConditionalJump(condition);
         IntConsumer jumpToElse = assGen.generateJump();
         conditionJump.accept(assGen.getCurrentProgramAddress());
+        assGen.pushScope();
+        for (Variable v : ifScope) {
+            assGen.declareVariable(v.getName());
+        }
         for(Statement s : ifStatements){
             s.generateAssembly(assGen);
         }
+        assGen.popScope();
         IntConsumer jumpToEnd = assGen.generateJump();
         jumpToElse.accept(assGen.getCurrentProgramAddress());
+        assGen.pushScope();
+        for (Variable v : elseScope) {
+            assGen.declareVariable(v.getName());
+        }
         for(Statement s : elseStatements){
             s.generateAssembly(assGen);
         }

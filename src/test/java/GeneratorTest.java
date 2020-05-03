@@ -139,6 +139,54 @@ public class GeneratorTest {
         assertEquals(expected,generator.getGeneratedAssembly());
     }
 
+    @Test
+    public void testIfScoping(){
+        Ast ast = new Ast();
+        Function f = new Function("main", new Void(), Collections.emptyList());
+        Variable v1 = new Variable("i", new Int());
+        Variable v2 = new Variable("i", new Int());
+        IfStatement ifStatement = new IfStatement(new BoolLiteral(true), Arrays.asList(new Assignment(v1, new IntLiteral(0))),
+                Arrays.asList(new Assignment(v2, new IntLiteral(2))), Arrays.asList(v1), Arrays.asList(v2));
+        f.addStatement(ifStatement);
+
+        FacAssemblyGenerator generator = new FacAssemblyGenerator(0);
+        ast.generateAssembly(generator);
+
+        List<Map<String, Integer>> expected = new LinkedList<>();
+        Map<String, Integer> command1 = new HashMap<>();
+        command1.put("R", 0);
+        command1.put("O", 1);
+        expected.add(command1);
+
+        Map<String, Integer> command2 = new HashMap<>();
+        command2.put("A" ,1);
+        command2.put("2", 0);
+        command2.put("fast inserter",1);
+        command2.put("D", 4);
+        command2.put("J", 2);
+        expected.add(command2);
+
+        Map<String, Integer> command3 = new HashMap<>();
+        command3.put("J", 1);
+        command3.put("O", 6);
+        expected.add(command3);
+
+        Map<String, Integer> command4 = new HashMap<>();
+        command4.put("R", 1);
+        command4.put("O", 0);
+        expected.add(command4);
+
+        Map<String, Integer> command5 = new HashMap<>();
+        command5.put("J", 1);
+        command5.put("O", 7);
+        expected.add(command5);
+
+        Map<String, Integer> command6 = new HashMap<>();
+        command6.put("R", 2);
+        command6.put("O", 2);
+        expected.add(command6);
+    }
+
 
     @Test
     public void testVariableRead(){
