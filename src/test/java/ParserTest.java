@@ -826,4 +826,111 @@ public class ParserTest {
                 "}\n\n";
         compareResult(tokens, expected);
     }
+
+    @Test
+    public void testWhile(){
+        Token[] tokens = {
+                new Token(TokenType.KEYWORD_VOID),
+                new IdentifierToken("main"),
+                new Token(TokenType.BRACE_OPEN),
+                new Token(TokenType.BRACE_CLOSE),
+                new Token(TokenType.CURLY_BRACE_OPEN),
+
+                new Token(TokenType.KEYWORD_WHILE),
+                new Token(TokenType.BRACE_OPEN),
+                new BooleanLiteralToken(true),
+                new Token(TokenType.BRACE_CLOSE),
+                new Token(TokenType.CURLY_BRACE_OPEN),
+                new Token(TokenType.KEYWORD_INT),
+                new IdentifierToken("i"),
+                new Token(TokenType.EQUALS),
+                new IntLiteralToken(2),
+                new Token(TokenType.SEMICOLON),
+                new Token(TokenType.CURLY_BRACE_CLOSE),
+
+                new Token(TokenType.CURLY_BRACE_CLOSE)
+        };
+        String expected = "\n" +
+                "void main(){\n" +
+                "while(true){\n" +
+                "int i;\n" +
+                "i = 2;\n" +
+                "}nobreak{\n" +
+                "}\n" +
+                "}\n\n";
+        compareResult(tokens, expected);
+    }
+
+    @Test
+    public void testWhileBreak(){
+        Token[] tokens = {
+                new Token(TokenType.KEYWORD_VOID),
+                new IdentifierToken("main"),
+                new Token(TokenType.BRACE_OPEN),
+                new Token(TokenType.BRACE_CLOSE),
+                new Token(TokenType.CURLY_BRACE_OPEN),
+
+                new Token(TokenType.KEYWORD_WHILE),
+                new Token(TokenType.BRACE_OPEN),
+                new BooleanLiteralToken(true),
+                new Token(TokenType.BRACE_CLOSE),
+                new Token(TokenType.CURLY_BRACE_OPEN),
+                new Token(TokenType.KEYWORD_BREAK),
+                new Token(TokenType.BRACE_OPEN),
+                new IntLiteralToken(0),
+                new Token(TokenType.BRACE_CLOSE),
+                new Token(TokenType.SEMICOLON),
+                new Token(TokenType.BRACE_CLOSE),
+
+                new Token(TokenType.CURLY_BRACE_CLOSE)
+        };
+        String expected = "\n" +
+                "void main(){\n" +
+                "while(true){\n" +
+                "int i;\n" +
+                "i = 2;\n" +
+                "}\n" +
+                "}\n\n";
+        compareResult(tokens, expected);
+    }
+
+    @Test
+    public void testWhileNoBreak(){
+        Token[] tokens = {
+                new Token(TokenType.KEYWORD_VOID),
+                new IdentifierToken("main"),
+                new Token(TokenType.BRACE_OPEN),
+                new Token(TokenType.BRACE_CLOSE),
+                new Token(TokenType.CURLY_BRACE_OPEN),
+
+                new Token(TokenType.KEYWORD_WHILE),
+                new Token(TokenType.BRACE_OPEN),
+                new BooleanLiteralToken(true),
+                new Token(TokenType.BRACE_CLOSE),
+                new Token(TokenType.CURLY_BRACE_OPEN),
+                new Token(TokenType.KEYWORD_INT),
+                new IdentifierToken("i"),
+                new Token(TokenType.EQUALS),
+                new IntLiteralToken(2),
+                new Token(TokenType.SEMICOLON),
+                new Token(TokenType.BRACE_CLOSE),
+                new Token(TokenType.KEYWORD_NOBREAK),
+                new Token(TokenType.KEYWORD_INT),
+                new IdentifierToken("i"),
+                new Token(TokenType.EQUALS),
+                new IntLiteralToken(4),
+                new Token(TokenType.SEMICOLON),
+                new Token(TokenType.CURLY_BRACE_CLOSE),
+
+                new Token(TokenType.CURLY_BRACE_CLOSE)
+        };
+        String expected = "\n" +
+                "void main(){\n" +
+                "while(true){\n" +
+                "int i;\n" +
+                "i = 2;\n" +
+                "}\n" +
+                "}\n\n";
+        compareResult(tokens, expected);
+    }
 }

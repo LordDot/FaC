@@ -2,6 +2,7 @@ package parser;
 
 import parser.ast.*;
 import parser.ast.expressions.Expression;
+import parser.ast.expressions.WhileStatement;
 import parser.types.Bool;
 import parser.types.Int;
 import parser.types.Type;
@@ -122,9 +123,31 @@ public class Parser {
             return parseAssignment();
         } else if (tokens.getCurrentToken().getType() == TokenType.KEYWORD_IF) {
             return parseIfElseStatement();
+        } else if (tokens.getCurrentType() == TokenType.KEYWORD_WHILE) {
+            return parseWhileLoop();
         } else {
             throw new CompilerException("Unknown thing");
         }
+    }
+
+    private Statement parseWhileLoop() {
+        tokens.step();
+        tokens.expectedToken(TokenType.BRACE_OPEN);
+        Expression<Boolean> condition = expressionParser.parseExpression();
+        tokens.expectedToken(TokenType.BRACE_CLOSE);
+        List<Statement> bodyStatements = parseBlock();
+        List<Variable> bodyScope = scoper.popScope();
+        List<Statement> nobreakStatements;
+        List<Variable> nobreakScope;
+        if (tokens.getCurrentType() == TokenType.KEYWORD_NOBREAK) {
+            tokens.step();
+            nobreakStatements = parseBlock();
+            nobreakScope = scoper.popScope();
+        } else {
+            nobreakStatements = new LinkedList<>();
+            nobreakScope = new LinkedList<>();
+        }
+        return new WhileStatement(condition, bodyStatements, bodyScope, nobreakStatements, nobreakScope);
     }
 
     private Statement parseIfElseStatement() {
@@ -188,11 +211,10 @@ public class Parser {
     }
 
 
-
     private static boolean isType(Token token) {
-        if(token.getType() == TokenType.KEYWORD_INT){
+        if (token.getType() == TokenType.KEYWORD_INT) {
             return true;
-        }else if(token.getType() == TokenType.KEYWORD_BOOL){
+        } else if (token.getType() == TokenType.KEYWORD_BOOL) {
             return true;
         }
         return false;
@@ -203,7 +225,7 @@ public class Parser {
             return new Void();
         } else if (tokens.getCurrentToken().getType() == TokenType.KEYWORD_INT) {
             return new Int();
-        }else if(tokens.getCurrentType() == TokenType.KEYWORD_BOOL){
+        } else if (tokens.getCurrentType() == TokenType.KEYWORD_BOOL) {
             return new Bool();
         } else {
             throw new CompilerException("Function or global Variable Declaration must start with type");

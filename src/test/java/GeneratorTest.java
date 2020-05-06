@@ -3,6 +3,7 @@ import org.junit.jupiter.api.Test;
 import parser.Ast;
 import parser.ast.*;
 import parser.ast.expressions.Expression;
+import parser.ast.expressions.WhileStatement;
 import parser.ast.expressions.bool.AndExpression;
 import parser.ast.expressions.bool.BoolLiteral;
 import parser.ast.expressions.bool.NotExpression;
@@ -419,5 +420,99 @@ public class GeneratorTest {
         expected.add(command2);
 
         assertEquals(expected,generator.getGeneratedAssembly());
+    }
+
+    @Test
+    public void testWhile(){
+        Ast ast = new Ast();
+        Function f = new Function("main", new Void(), Collections.EMPTY_LIST);
+        ast.addFunction(f);
+        Variable v1 = new Variable("i", new Int());
+        Variable v2 = new Variable("i", new Int());
+        f.addStatement(new WhileStatement(new BoolLiteral(true), Collections.singletonList(new Assignment(v1, new IntLiteral(1))),
+                 Collections.singletonList(v1), Collections.singletonList(new Assignment(v2, new IntLiteral(2))), Collections.singletonList(v2)));
+
+        FacAssemblyGenerator generator = new FacAssemblyGenerator(0);
+        ast.generateAssembly(generator);
+
+        List<Map<String,Integer>> expected = new LinkedList<>();
+        Map<String, Integer> command1 = new HashMap<>();
+        command1.put("R", 0);
+        command1.put("O", 1);
+        expected.add(command1);
+
+        Map<String, Integer> command2 = new HashMap<>();
+        command2.put("A", 0);
+        command2.put("2", 0);
+        command2.put("burner inserter", 1);
+        command2.put("J", 2);
+        command2.put("D", 5);
+        expected.add(command2);
+
+        Map<String, Integer> command3 = new HashMap<>();
+        command3.put("R", 1);
+        command3.put("O", 1);
+        expected.add(command3);
+
+        Map<String, Integer> command4 = new HashMap<>();
+        command4.put("J", 1);
+        command4.put("O", 2);
+        expected.add(command4);
+
+        Map<String, Integer> command5 = new HashMap<>();
+        command5.put("R", 2);
+        command5.put("O", 2);
+        expected.add(command5);
+
+        assertEquals(expected, generator.getGeneratedAssembly());
+    }
+
+    @Test
+    public void testWhileBreak(){
+        Ast ast = new Ast();
+        Function f = new Function("main", new Void(), Collections.EMPTY_LIST);
+        ast.addFunction(f);
+        Variable v1 = new Variable("i", new Int());
+        Variable v2 = new Variable("i", new Int());
+        f.addStatement(new WhileStatement(new BoolLiteral(true), Arrays.asList(new Assignment(v1, new IntLiteral(1)),new BreakStatement(0)),
+                Collections.singletonList(v1), Collections.singletonList(new Assignment(v2, new IntLiteral(2))), Collections.singletonList(v2)));
+
+        FacAssemblyGenerator generator = new FacAssemblyGenerator(0);
+        ast.generateAssembly(generator);
+
+        List<Map<String,Integer>> expected = new LinkedList<>();
+        Map<String, Integer> command1 = new HashMap<>();
+        command1.put("R", 0);
+        command1.put("O", 1);
+        expected.add(command1);
+
+        Map<String, Integer> command2 = new HashMap<>();
+        command2.put("A", 0);
+        command2.put("2", 0);
+        command2.put("burner inserter", 1);
+        command2.put("J", 2);
+        command2.put("D", 6);
+        expected.add(command2);
+
+        Map<String, Integer> command3 = new HashMap<>();
+        command3.put("R", 1);
+        command3.put("O", 1);
+        expected.add(command3);
+
+        Map<String, Integer> command4 = new HashMap<>();
+        command4.put("J", 1);
+        command4.put("O", 7);
+
+        Map<String, Integer> command5 = new HashMap<>();
+        command5.put("J", 1);
+        command5.put("O", 2);
+        expected.add(command5);
+
+        Map<String, Integer> command6 = new HashMap<>();
+        command6.put("R", 2);
+        command6.put("O", 2);
+        expected.add(command6);
+
+        assertEquals(expected, generator.getGeneratedAssembly());
     }
 }

@@ -39,9 +39,9 @@ public class IfStatement extends Statement {
             builder.append(v.toPrettyString() + "\n");
         }
         for(Statement s : elseStatements){
-            builder.append(s.toPrettyString());
+            builder.append(s.toPrettyString() + "\n");
         }
-        builder.append("\n}");
+        builder.append("}");
         return builder.toString();
     }
 
