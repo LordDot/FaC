@@ -880,15 +880,15 @@ public class ParserTest {
                 new IntLiteralToken(0),
                 new Token(TokenType.BRACE_CLOSE),
                 new Token(TokenType.SEMICOLON),
-                new Token(TokenType.BRACE_CLOSE),
+                new Token(TokenType.CURLY_BRACE_CLOSE),
 
                 new Token(TokenType.CURLY_BRACE_CLOSE)
         };
         String expected = "\n" +
                 "void main(){\n" +
                 "while(true){\n" +
-                "int i;\n" +
-                "i = 2;\n" +
+                "break(0);\n" +
+                "}nobreak{\n" +
                 "}\n" +
                 "}\n\n";
         compareResult(tokens, expected);
@@ -913,8 +913,9 @@ public class ParserTest {
                 new Token(TokenType.EQUALS),
                 new IntLiteralToken(2),
                 new Token(TokenType.SEMICOLON),
-                new Token(TokenType.BRACE_CLOSE),
+                new Token(TokenType.CURLY_BRACE_CLOSE),
                 new Token(TokenType.KEYWORD_NOBREAK),
+                new Token(TokenType.CURLY_BRACE_OPEN),
                 new Token(TokenType.KEYWORD_INT),
                 new IdentifierToken("i"),
                 new Token(TokenType.EQUALS),
@@ -929,6 +930,9 @@ public class ParserTest {
                 "while(true){\n" +
                 "int i;\n" +
                 "i = 2;\n" +
+                "}nobreak{\n" +
+                "int i;\n" +
+                "i = 4;\n" +
                 "}\n" +
                 "}\n\n";
         compareResult(tokens, expected);

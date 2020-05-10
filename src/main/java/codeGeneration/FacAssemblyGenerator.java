@@ -22,6 +22,7 @@ public class FacAssemblyGenerator implements AssemblyGenerator{
 
     private List<Map<String,Integer>> generatedAssembly;
     private Map<String,Integer>  functionAdresses;
+    private Stack<List<IntConsumer>> loopBreaks;
 
     public FacAssemblyGenerator(int adressBuffer){
         scopes = new Stack<>();
@@ -29,6 +30,7 @@ public class FacAssemblyGenerator implements AssemblyGenerator{
 
         generatedAssembly = new LinkedList<>();
         functionAdresses = new HashMap<>();
+        loopBreaks = new Stack<>();
     }
 
     public List<Map<String, Integer>> getGeneratedAssembly() {
@@ -91,6 +93,25 @@ public class FacAssemblyGenerator implements AssemblyGenerator{
     @Override
     public int getCurrentProgramAddress() {
         return generatedAssembly.size() + 1;
+    }
+
+    @Override
+    public void beginLoop() {
+        loopBreaks.push(new LinkedList<>());
+    }
+
+    @Override
+    public void endLoop() {
+        List<IntConsumer> popped = loopBreaks.pop();
+        for (IntConsumer intConsumer : popped) {
+            intConsumer.accept(getCurrentProgramAddress());
+        }
+    }
+
+    @Override
+    public void generateBreak(int loops) {
+        List<IntConsumer> loop = loopBreaks.get(loopBreaks.size() - 1 - loops);
+        loop.add(generateJump());
     }
 
     @Override

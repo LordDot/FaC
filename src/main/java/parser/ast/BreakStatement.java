@@ -16,6 +16,6 @@ public class BreakStatement extends Statement {
 
     @Override
     public void generateAssembly(AssemblyGenerator assGen) {
-        throw new RuntimeException("not implemented");
+        assGen.generateBreak(numberOfLoops);
     }
 }

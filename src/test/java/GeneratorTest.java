@@ -1,3 +1,4 @@
+import codeGeneration.AssemblyGenerator;
 import codeGeneration.FacAssemblyGenerator;
 import org.junit.jupiter.api.Test;
 import parser.Ast;
@@ -444,25 +445,30 @@ public class GeneratorTest {
         Map<String, Integer> command2 = new HashMap<>();
         command2.put("A", 0);
         command2.put("2", 0);
-        command2.put("burner inserter", 1);
+        command2.put("fast inserter", 1);
         command2.put("J", 2);
-        command2.put("D", 5);
+        command2.put("D", 4);
         expected.add(command2);
 
         Map<String, Integer> command3 = new HashMap<>();
-        command3.put("R", 1);
-        command3.put("O", 1);
+        command3.put("J",1);
+        command3.put("O", 6);
         expected.add(command3);
 
         Map<String, Integer> command4 = new HashMap<>();
-        command4.put("J", 1);
-        command4.put("O", 2);
+        command4.put("R", 1);
+        command4.put("O", 1);
         expected.add(command4);
 
         Map<String, Integer> command5 = new HashMap<>();
-        command5.put("R", 2);
-        command5.put("O", 2);
+        command5.put("J", 1);
+        command5.put("O", 1);
         expected.add(command5);
+
+        Map<String, Integer> command6 = new HashMap<>();
+        command6.put("R", 1);
+        command6.put("O", 2);
+        expected.add(command6);
 
         assertEquals(expected, generator.getGeneratedAssembly());
     }
@@ -489,30 +495,131 @@ public class GeneratorTest {
         Map<String, Integer> command2 = new HashMap<>();
         command2.put("A", 0);
         command2.put("2", 0);
-        command2.put("burner inserter", 1);
+        command2.put("fast inserter", 1);
         command2.put("J", 2);
-        command2.put("D", 6);
+        command2.put("D", 4);
         expected.add(command2);
 
         Map<String, Integer> command3 = new HashMap<>();
-        command3.put("R", 1);
-        command3.put("O", 1);
+        command3.put("J", 1);
+        command3.put("O", 7);
         expected.add(command3);
 
         Map<String, Integer> command4 = new HashMap<>();
-        command4.put("J", 1);
-        command4.put("O", 7);
+        command4.put("R", 1);
+        command4.put("O", 1);
+        expected.add(command4);
 
         Map<String, Integer> command5 = new HashMap<>();
         command5.put("J", 1);
-        command5.put("O", 2);
+        command5.put("O", 8);
         expected.add(command5);
 
         Map<String, Integer> command6 = new HashMap<>();
-        command6.put("R", 2);
-        command6.put("O", 2);
+        command6.put("J", 1);
+        command6.put("O", 1);
         expected.add(command6);
 
+        Map<String, Integer> command7 = new HashMap<>();
+        command7.put("R", 1);
+        command7.put("O", 2);
+        expected.add(command7);
+
+
         assertEquals(expected, generator.getGeneratedAssembly());
+    }
+
+    @Test
+    public void testMultiWhileBreak(){
+        Ast ast = new Ast();
+        Variable v = new Variable("i", new Int());
+        Function f = new Function("main", new Void(), Collections.singletonList(v));
+
+        Statement innerWhile = new WhileStatement(new BoolLiteral(true), Arrays.asList(new Statement[]{new BreakStatement(0), new BreakStatement(1)}),
+                Collections.EMPTY_LIST, Collections.singletonList(new Assignment(v, new IntLiteral(0))), Collections.EMPTY_LIST);
+        Statement outerWhile = new WhileStatement(new BoolLiteral(true),Collections.singletonList(innerWhile), Collections.EMPTY_LIST,
+                Collections.singletonList(new Assignment(v, new IntLiteral(1))), Collections.EMPTY_LIST);
+        f.addStatement(outerWhile);
+
+        FacAssemblyGenerator generator = new FacAssemblyGenerator(0);
+        ast.generateAssembly(generator);
+
+        List<Map<String, Integer>> expected = new LinkedList<>();
+        Map<String, Integer> command1 = new HashMap<>();
+        command1.put("R", 1);
+        command1.put("O", 1);
+        expected.add(command1);
+
+        //outer condition
+        Map<String, Integer> command2 = new HashMap<>();
+        command2.put("A", 1);
+        command2.put("2", 0);
+        command2.put("D",4);
+        command2.put("fast inserter", 1);
+        command2.put("J", 2);
+        expected.add(command2);
+
+        //jump to outer nobreak
+        Map<String, Integer> command3 = new HashMap<>();
+        command3.put("J",1);
+        command3.put("O", 12);
+        expected.add(command3);
+
+        //load inner condition
+        Map<String, Integer> command4 = new HashMap<>();
+        command4.put("R", 2);
+        command4.put("O", 1);
+        expected.add(command4);
+
+        //inner condition
+        Map<String, Integer> command5 = new HashMap<>();
+        command5.put("A", 2);
+        command5.put("2", 0);
+        command5.put("D", 7);
+        command5.put("J", 2);
+        command5.put("fast inserter", 1);
+        expected.add(command5);
+
+        //jump to inner nobreak
+        Map<String, Integer> command6 = new HashMap<>();
+        command6.put("J", 1);
+        command6.put("O", 10);
+        expected.add(command6);
+
+        //first break
+        Map<String, Integer> command7 = new HashMap<>();
+        command7.put("J", 1);
+        command7.put("O", 11);
+        expected.add(command7);
+
+        //second break
+        Map<String, Integer> command8 = new HashMap<>();
+        command7.put("J", 1);
+        command7.put("O", 13);
+        expected.add(command8);
+
+        //jump to inner condition
+        Map<String, Integer> command9 = new HashMap<>();
+        command7.put("J", 1);
+        command7.put("O", 4);
+        expected.add(command9);
+
+        //inner assignment
+        Map<String, Integer> command10 = new HashMap<>();
+        command10.put("R", 0);
+        command10.put("O", 0);
+        expected.add(command10);
+
+        //jump to outer condition
+        Map<String, Integer> command11 = new HashMap<>();
+        command11.put("J", 1);
+        command11.put("O", 1);
+        expected.add(command11);
+
+        //outer assignment
+        Map<String, Integer> command12 = new HashMap<>();
+        command12.put("R", 0);
+        command12.put("O", 1);
+        expected.add(command12);
     }
 }

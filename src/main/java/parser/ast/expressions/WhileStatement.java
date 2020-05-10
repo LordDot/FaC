@@ -1,11 +1,11 @@
 package parser.ast.expressions;
 
 import codeGeneration.AssemblyGenerator;
-import jdk.jshell.spi.ExecutionControl;
 import parser.ast.Statement;
 import parser.ast.Variable;
 
 import java.util.List;
+import java.util.function.IntConsumer;
 
 public class WhileStatement extends Statement {
     private Expression<Boolean> condition;
@@ -48,6 +48,29 @@ public class WhileStatement extends Statement {
 
     @Override
     public void generateAssembly(AssemblyGenerator assGen) {
-        throw new RuntimeException("not implemented");
+        int conditionCounter = assGen.getCurrentProgramAddress();
+        IntConsumer conditionalJump = assGen.generateConditionalJump(condition);
+        IntConsumer jumpToNoBreak = assGen.generateJump();
+        conditionalJump.accept(assGen.getCurrentProgramAddress());
+        assGen.beginLoop();
+        assGen.pushScope();
+        for(Variable v : bodyScope){
+            assGen.declareVariable(v.getName());
+        }
+        for(Statement s : bodyStatements){
+            s.generateAssembly(assGen);
+        }
+        assGen.popScope();
+        assGen.generateJump().accept(conditionCounter);
+        jumpToNoBreak.accept(assGen.getCurrentProgramAddress());
+        assGen.pushScope();
+        for(Variable v : nobreakScope){
+            assGen.declareVariable(v.getName());
+        }
+        for(Statement s : nobreakStatements){
+            s.generateAssembly(assGen);
+        }
+        assGen.popScope();
+        assGen.endLoop();
     }
 }

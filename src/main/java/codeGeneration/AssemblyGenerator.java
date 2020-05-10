@@ -19,6 +19,9 @@ public interface AssemblyGenerator {
     IntConsumer generateJump();
     IntConsumer generateConditionalJump(Expression condition);
     int getCurrentProgramAddress();
+    void beginLoop();
+    void endLoop();
+    void generateBreak(int loops);
 
     public enum Operation {
         ADDITION,

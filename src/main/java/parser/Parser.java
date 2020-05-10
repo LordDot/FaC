@@ -3,12 +3,14 @@ package parser;
 import parser.ast.*;
 import parser.ast.expressions.Expression;
 import parser.ast.expressions.WhileStatement;
+import parser.ast.expressions.integer.IntLiteral;
 import parser.types.Bool;
 import parser.types.Int;
 import parser.types.Type;
 import parser.types.Void;
 import tokenizer.CompilerException;
 import tokenizer.IdentifierToken;
+import tokenizer.IntLiteralToken;
 import tokenizer.Token;
 import tokenizer.Token.TokenType;
 
@@ -108,7 +110,15 @@ public class Parser {
     }
 
     private Statement parseStatement() {
-        if (isType(tokens.getCurrentToken())) {
+        if (tokens.getCurrentToken().getType() == TokenType.IDENTIFIER) {
+            return parseAssignment();
+        } else if (tokens.getCurrentToken().getType() == TokenType.KEYWORD_IF) {
+            return parseIfElseStatement();
+        } else if (tokens.getCurrentType() == TokenType.KEYWORD_WHILE) {
+            return parseWhileLoop();
+        } else if (tokens.getCurrentType() == TokenType.KEYWORD_BREAK) {
+            return parseBreak();
+        }else if (isType(tokens.getCurrentToken())) {
             Variable v = declareVariable();
             tokens.step();
             if (tokens.getCurrentToken().getType() == TokenType.EQUALS) {
@@ -119,15 +129,22 @@ public class Parser {
             } else {
                 throw new CompilerException("Unexpected thing");
             }
-        } else if (tokens.getCurrentToken().getType() == TokenType.IDENTIFIER) {
-            return parseAssignment();
-        } else if (tokens.getCurrentToken().getType() == TokenType.KEYWORD_IF) {
-            return parseIfElseStatement();
-        } else if (tokens.getCurrentType() == TokenType.KEYWORD_WHILE) {
-            return parseWhileLoop();
         } else {
             throw new CompilerException("Unknown thing");
         }
+    }
+
+    private Statement parseBreak() {
+        tokens.step();
+        tokens.expectedToken(TokenType.BRACE_OPEN);
+        if(tokens.getCurrentType() != TokenType.INT_LITERAL){
+            throw new CompilerException("Int Literal expected");
+        }
+        int loops = ((IntLiteralToken)tokens.getCurrentToken()).getValue();
+        tokens.step();
+        tokens.expectedToken(TokenType.BRACE_CLOSE);
+        tokens.expectedToken(TokenType.SEMICOLON);
+        return new BreakStatement(loops);
     }
 
     private Statement parseWhileLoop() {
