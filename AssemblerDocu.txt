@@ -1,4 +1,5 @@
 Store into Register: R
+result pointer: Q
 Load Constant: O
 Operand 1: 1
 Operand 2: 2

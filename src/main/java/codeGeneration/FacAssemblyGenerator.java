@@ -43,6 +43,11 @@ public class FacAssemblyGenerator implements AssemblyGenerator{
     }
 
     @Override
+    public int getAddressForVariable(String variableName) {
+        return lookupVariable(variableName);
+    }
+
+    @Override
     public void generateUnaryOperation(Operation operation, int into, int operandAddress) {
         Map<String, Integer> command = new HashMap<>();
         FacOperation operator = operationMapping.get(operation);
@@ -59,11 +64,37 @@ public class FacAssemblyGenerator implements AssemblyGenerator{
     }
 
     @Override
+    public void generateUnaryOperationByPointer(Operation operation, int intoPointer, int operandAddress) {
+        Map<String, Integer> command = new HashMap<>();
+        FacOperation operator = operationMapping.get(operation);
+        command.put(operator.getOpCode(), 1);
+        if(operator.isLhs()){
+            command.put("A", operandAddress);
+            command.put("2", operator.getOtherSide());
+        }else{
+            command.put("1", operator.getOtherSide());
+            command.put("B", operandAddress);
+        }
+        command.put("Q", intoPointer);
+        generatedAssembly.add(command);
+    }
+
+    @Override
     public void generateBinaryOperation(Operation op, int into, int lhs, int rhs) {
         Map<String, Integer> command = new HashMap<>();
         command.put("A", lhs);
         command.put("B", rhs);
         command.put("R", into);
+        command.put(operationMapping.get(op).getOpCode(), 1);
+        generatedAssembly.add(command);
+    }
+
+    @Override
+    public void generateBinaryOperationByPointer(Operation op, int intoPointer, int lhs, int rhs) {
+        Map<String, Integer> command = new HashMap<>();
+        command.put("A", lhs);
+        command.put("B", rhs);
+        command.put("Q", intoPointer);
         command.put(operationMapping.get(op).getOpCode(), 1);
         generatedAssembly.add(command);
     }
@@ -138,24 +169,39 @@ public class FacAssemblyGenerator implements AssemblyGenerator{
     }
 
     @Override
-    public void generateAssignment(String variableName, Expression value) {
-        Integer potentialAddress = lookupVariable(variableName);
-        if(potentialAddress == null){
-            throw new CompilerException("Unknown Variable: " + variableName);
-        }
-        generateAssignment(potentialAddress.intValue(), value);
-    }
-
-    @Override
     public void generateAssignment(int address, Expression value) {
         value.generateAssembly(this, address);
     }
 
     @Override
-    public void loadConstant(int address, int value) {
+    public void generateAssignmentByPointer(int pointer, Expression value){
+        value.generateAssemblyByPointer(this, pointer);
+    }
+
+    @Override
+    public void loadValue(int address, int value) {
         Map<String, Integer> command = new HashMap<>();
         command.put("R", address);
         command.put("O", value);
+        generatedAssembly.add(command);
+    }
+
+    @Override
+    public void loadValueByPointer(int intoPointer, int value) {
+        Map<String, Integer> command = new HashMap<>();
+        command.put("O", value);
+        command.put("Q", intoPointer);
+        generatedAssembly.add(command);
+    }
+
+    @Override
+    public void copyVariableIntoPointer(String variableName, int intoPointer) {
+        int variableAddress = lookupVariable(variableName);
+        Map<String,Integer> command = new HashMap<>();
+        command.put("A", variableAddress);
+        command.put("Q", intoPointer);
+        command.put("2", 1);
+        command.put("steel chest", 1);
         generatedAssembly.add(command);
     }
 

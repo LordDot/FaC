@@ -29,7 +29,12 @@ public class IntLiteral extends Expression<Integer> {
 
     @Override
     public void generateAssembly(AssemblyGenerator generator, int into) {
-        generator.loadConstant(into, value);
+        generator.loadValue(into, value);
+    }
+
+    @Override
+    public void generateAssemblyByPointer(AssemblyGenerator generator, int intoPointer) {
+        generator.loadValueByPointer(intoPointer, value);
     }
 
     @Override

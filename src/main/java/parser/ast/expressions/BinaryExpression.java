@@ -28,8 +28,21 @@ public abstract class BinaryExpression<R,T1,T2> extends Expression<R> {
         generateOperation(generator, into, lhsAddress, rhsAddress);
     }
 
+    @Override
+    public void generateAssemblyByPointer(AssemblyGenerator generator, int intoPointer) {
+        int lhsAddress = generator.getFreeAddress();
+        int rhsAddress = generator.getFreeAddress();
+        lhs.generateAssembly(generator, lhsAddress);
+        rhs.generateAssembly(generator, rhsAddress);
+        generateOperationByPointer(generator, intoPointer, lhsAddress, rhsAddress);
+    }
+
     public void generateOperation(AssemblyGenerator generator, int into, int lhs, int rhs){
         generator.generateBinaryOperation(operation, into, lhs, rhs);
+    }
+
+    public void generateOperationByPointer(AssemblyGenerator generator, int intoPointer, int lhs, int rhs){
+        generator.generateBinaryOperationByPointer(operation, intoPointer, lhs, rhs);
     }
 
     public Expression getRhs() {

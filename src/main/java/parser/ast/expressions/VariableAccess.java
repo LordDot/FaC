@@ -5,7 +5,7 @@ import parser.ast.Variable;
 import parser.ast.expressions.Expression;
 import parser.types.Type;
 
-public class VariableAccess extends Expression<Integer> {
+public class VariableAccess extends LExpression<Integer> {
     private Variable accessed;
 
     public VariableAccess(Variable accessed) {
@@ -33,7 +33,17 @@ public class VariableAccess extends Expression<Integer> {
     }
 
     @Override
+    public void generateAssemblyByPointer(AssemblyGenerator generator, int intoPointer) {
+        generator.copyVariableIntoPointer(accessed.getName(), intoPointer);
+    }
+
+    @Override
     public Type getType() {
         return accessed.getType();
+    }
+
+    @Override
+    public void generateAddress(AssemblyGenerator generator, int into) {
+        generator.loadValue(into,generator.getAddressForVariable(accessed.getName()));
     }
 }

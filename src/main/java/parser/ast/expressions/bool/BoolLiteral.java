@@ -34,6 +34,11 @@ public class BoolLiteral extends Expression<Boolean> {
     }
 
     @Override
+    public void generateAssemblyByPointer(AssemblyGenerator generator, int intoPointer) {
+        generator.loadValueByPointer(intoPointer, value?1:0);
+    }
+
+    @Override
     public Type getType() {
         return new Bool();
     }

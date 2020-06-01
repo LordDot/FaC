@@ -37,6 +37,13 @@ public abstract class UnaryExpression<R,T> extends Expression<R> {
     }
 
     @Override
+    public void generateAssemblyByPointer(AssemblyGenerator generator, int intoPointer) {
+        int operandAddress = generator.getFreeAddress();
+        operand.generateAssembly(generator, operandAddress);
+        generateOperationByPointer(generator, intoPointer, operandAddress);
+    }
+
+    @Override
     public void generateAssembly(AssemblyGenerator generator, int into) {
         int operandAddress = generator.getFreeAddress();
         operand.generateAssembly(generator, operandAddress);
@@ -45,5 +52,9 @@ public abstract class UnaryExpression<R,T> extends Expression<R> {
 
     public void generateOperation(AssemblyGenerator generator, int into, int operandAddress){
         generator.generateUnaryOperation(operation, into, operandAddress);
+    }
+
+    public void generateOperationByPointer(AssemblyGenerator generator, int intoPointer, int operandAddress){
+        generator.generateUnaryOperationByPointer(operation, intoPointer, operandAddress);
     }
 }

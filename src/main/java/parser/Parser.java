@@ -2,6 +2,7 @@ package parser;
 
 import parser.ast.*;
 import parser.ast.expressions.Expression;
+import parser.ast.expressions.VariableAccess;
 import parser.ast.expressions.WhileStatement;
 import parser.ast.expressions.integer.IntLiteral;
 import parser.types.Bool;
@@ -73,7 +74,7 @@ public class Parser {
             }
             tokens.step();
 
-            ast.addInitialization(new Assignment(v, rhs));
+            ast.addInitialization(new Assignment(new VariableAccess(v), rhs));
         } else {
             throw new CompilerException("Unexpected Symbol");
         }
@@ -224,7 +225,7 @@ public class Parser {
             throw new CompilerException("';' Expected");
         }
         tokens.step();
-        return new Assignment(v, rhs);
+        return new Assignment(new VariableAccess(v), rhs);
     }
 
 
