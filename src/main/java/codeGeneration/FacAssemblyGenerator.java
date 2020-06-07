@@ -15,6 +15,7 @@ public class FacAssemblyGenerator implements AssemblyGenerator{
         operationMapping.put(Operation.DIVISION,new FacOperation("iron chest"));
         operationMapping.put(Operation.NEGATION, new FacOperation("tank", false, 0));
         operationMapping.put(Operation.BOOL_NOT, new FacOperation("fast inserter", true, 0));
+        operationMapping.put(Operation.SMALLER, new FacOperation("blue splitter"));
     }
 
     private Stack<Map<String,Integer>> scopes;
@@ -203,6 +204,20 @@ public class FacAssemblyGenerator implements AssemblyGenerator{
         command.put("2", 1);
         command.put("steel chest", 1);
         generatedAssembly.add(command);
+    }
+
+    @Override
+    public void copyFromPointer(int pointerAddress, int into) {
+        Map<String, Integer> command = new HashMap<>();
+        command.put("R", into);
+        command.put("S", pointerAddress);
+        command.put("steel chest", 1);
+        command.put("2", 1);
+    }
+
+    @Override
+    public void copyFromPointerIntoPointer(int fromPointerAddress, int intoPointerAddress) {
+
     }
 
     @Override

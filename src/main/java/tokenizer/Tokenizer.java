@@ -56,6 +56,12 @@ public class Tokenizer implements Iterator<Token>{
                         return new BooleanLiteralToken(true);
                     } else if (str.equals("false")) {
                         return new BooleanLiteralToken(false);
+                    }else if (str.equals("while")) {
+                        return new Token(Token.TokenType.KEYWORD_WHILE);
+                    }else if (str.equals("break")) {
+                        return new Token(Token.TokenType.KEYWORD_BREAK);
+                    }else if (str.equals("nobreak")){
+                        return new Token(Token.TokenType.KEYWORD_NOBREAK);
                     }else{
                         return new IdentifierToken(str);
                     }

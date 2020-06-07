@@ -2,12 +2,11 @@ package parser;
 
 import parser.ast.*;
 import parser.ast.expressions.Expression;
+import parser.ast.expressions.LExpression;
 import parser.ast.expressions.VariableAccess;
 import parser.ast.expressions.WhileStatement;
 import parser.ast.expressions.integer.IntLiteral;
-import parser.types.Bool;
-import parser.types.Int;
-import parser.types.Type;
+import parser.types.*;
 import parser.types.Void;
 import tokenizer.CompilerException;
 import tokenizer.IdentifierToken;
@@ -50,7 +49,6 @@ public class Parser {
 
     private void parseTopLevel() {
         Type type = parseType();
-        tokens.step();
 
         if (tokens.getCurrentToken().getType() != TokenType.IDENTIFIER) {
             throw new CompilerException("Identifier expected");
@@ -111,9 +109,7 @@ public class Parser {
     }
 
     private Statement parseStatement() {
-        if (tokens.getCurrentToken().getType() == TokenType.IDENTIFIER) {
-            return parseAssignment();
-        } else if (tokens.getCurrentToken().getType() == TokenType.KEYWORD_IF) {
+        if (tokens.getCurrentToken().getType() == TokenType.KEYWORD_IF) {
             return parseIfElseStatement();
         } else if (tokens.getCurrentType() == TokenType.KEYWORD_WHILE) {
             return parseWhileLoop();
@@ -123,7 +119,7 @@ public class Parser {
             Variable v = declareVariable();
             tokens.step();
             if (tokens.getCurrentToken().getType() == TokenType.EQUALS) {
-                return parseAssignment(v);
+                return parseAssignment(new VariableAccess(v));
             } else if (tokens.getCurrentToken().getType() == TokenType.SEMICOLON) {
                 tokens.step();
                 return null;
@@ -131,7 +127,7 @@ public class Parser {
                 throw new CompilerException("Unexpected thing");
             }
         } else {
-            throw new CompilerException("Unknown thing");
+            return parseAssignment();
         }
     }
 
@@ -190,7 +186,7 @@ public class Parser {
 
     private Variable declareVariable() {
         Type type = parseType();
-        tokens.step();
+
         if (tokens.getCurrentToken().getType() != TokenType.IDENTIFIER) {
             throw new CompilerException("identifier expected");
         }
@@ -205,16 +201,14 @@ public class Parser {
     }
 
     private Assignment parseAssignment() {
-        String name = ((IdentifierToken) tokens.getCurrentToken()).getName();
-        Variable v = scoper.findVariable(name);
-        if (v == null) {
-            throw new CompilerException("Undeclared variable " + name);
+        Expression lhs = expressionParser.parseExpression();
+        if(!lhs.isLValue()){
+            throw new CompilerException("LValue expected");
         }
-        tokens.step();
-        return parseAssignment(v);
+        return parseAssignment((LExpression)lhs);
     }
 
-    private Assignment parseAssignment(Variable v) {
+    private Assignment parseAssignment(LExpression lhs) {
 
         if (tokens.getCurrentToken().getType() != TokenType.EQUALS) {
             throw new CompilerException("Expected =");
@@ -225,7 +219,7 @@ public class Parser {
             throw new CompilerException("';' Expected");
         }
         tokens.step();
-        return new Assignment(new VariableAccess(v), rhs);
+        return new Assignment(lhs, rhs);
     }
 
 
@@ -239,14 +233,24 @@ public class Parser {
     }
 
     private Type parseType() {
+        Type type = null;
         if (tokens.getCurrentToken().getType() == TokenType.KEYWORD_VOID) {
-            return new Void();
+            type = new Void();
+            tokens.step();
         } else if (tokens.getCurrentToken().getType() == TokenType.KEYWORD_INT) {
-            return new Int();
+            type = new Int();
+            tokens.step();
         } else if (tokens.getCurrentType() == TokenType.KEYWORD_BOOL) {
-            return new Bool();
+            type = new Bool();
+            tokens.step();
         } else {
             throw new CompilerException("Function or global Variable Declaration must start with type");
         }
+
+        if(tokens.getCurrentType() == TokenType.STAR){
+            type = new Pointer(type);
+            tokens.step();
+        }
+        return type;
     }
 }

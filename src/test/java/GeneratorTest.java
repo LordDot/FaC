@@ -722,4 +722,9 @@ public class GeneratorTest {
         command12.put("O", 1);
         expected.add(command12);
     }
+
+    @Test
+    public void testOperators(){
+        fail();
+    }
 }

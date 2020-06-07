@@ -125,4 +125,11 @@ public class TokenizerTest {
         Tokenizer tokenizer = new Tokenizer(new StringReader(program));
         assertThrows(CompilerException.class, ()->tokenizer.next());
     }
+
+    @Test
+    public void testWhile() throws IOException {
+        String program = "while break nobreak";
+        Token[] result = {new Token(TokenType.KEYWORD_WHILE), new Token(TokenType.KEYWORD_BREAK), new Token(TokenType.KEYWORD_NOBREAK)};
+        testString(program, result);
+    }
 }

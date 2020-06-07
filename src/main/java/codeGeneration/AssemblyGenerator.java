@@ -15,6 +15,8 @@ public interface AssemblyGenerator {
     void loadValue(int address, int value);
     void loadValueByPointer(int intoPointer, int value);
     void copyVariableIntoPointer(String variableName, int intoPointer);
+    void copyFromPointer(int pointerAddress, int into);
+    void copyFromPointerIntoPointer(int fromPointerAddress, int intoPointerAddress);
     int getFreeAddress();
     int getAddressForVariable(String variableName);
     void generateUnaryOperation(Operation operation, int into, int operandAddress);

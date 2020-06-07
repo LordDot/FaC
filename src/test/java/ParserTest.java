@@ -937,4 +937,83 @@ public class ParserTest {
                 "}\n\n";
         compareResult(tokens, expected);
     }
+
+    @Test
+    public void testPointerWrite(){
+        Token[] tokens = {
+                new Token(TokenType.KEYWORD_VOID),
+                new IdentifierToken("main"),
+                new Token(TokenType.BRACE_OPEN),
+                new Token(TokenType.BRACE_CLOSE),
+                new Token(TokenType.CURLY_BRACE_OPEN),
+
+                new Token(TokenType.STAR),
+                new IntLiteralToken(10),
+                new Token(TokenType.EQUALS),
+                new IntLiteralToken(3),
+                new Token(TokenType.SEMICOLON),
+
+                new Token(TokenType.CURLY_BRACE_CLOSE)
+        };
+
+        String expected = "\n" +
+                "void main(){\n" +
+                "*(10) = 3;\n" +
+                "}\n\n";
+        compareResult(tokens, expected);
+    }
+
+    @Test
+    public void testPointerRead(){
+        Token[] tokens = {
+                new Token(TokenType.KEYWORD_VOID),
+                new IdentifierToken("main"),
+                new Token(TokenType.BRACE_OPEN),
+                new Token(TokenType.BRACE_CLOSE),
+                new Token(TokenType.CURLY_BRACE_OPEN),
+
+                new Token(TokenType.KEYWORD_INT),
+                new IdentifierToken("i"),
+                new Token(TokenType.EQUALS),
+                new Token(TokenType.STAR),
+                new IntLiteralToken(10),
+                new Token(TokenType.SEMICOLON),
+
+                new Token(TokenType.CURLY_BRACE_CLOSE)
+        };
+
+        String expected = "\n" +
+                "void main(){\n" +
+                "int i;\n" +
+                "i = *(10);\n" +
+                "}\n\n";
+        compareResult(tokens, expected);
+    }
+
+    @Test
+    public void testPointerType(){
+        Token[] tokens = {
+                new Token(TokenType.KEYWORD_VOID),
+                new IdentifierToken("main"),
+                new Token(TokenType.BRACE_OPEN),
+                new Token(TokenType.BRACE_CLOSE),
+                new Token(TokenType.CURLY_BRACE_OPEN),
+
+                new Token(TokenType.KEYWORD_INT),
+                new Token(TokenType.STAR),
+                new IdentifierToken("i"),
+                new Token(TokenType.EQUALS),
+                new IntLiteralToken(10),
+                new Token(TokenType.SEMICOLON),
+
+                new Token(TokenType.CURLY_BRACE_CLOSE)
+        };
+
+        String expected = "\n" +
+                "void main(){\n" +
+                "int* i;\n" +
+                "i = 10;\n" +
+                "}\n\n";
+        compareResult(tokens, expected);
+    }
 }

@@ -1,6 +1,7 @@
 package parser;
 
 import parser.ast.*;
+import parser.ast.expressions.DereferenceExpression;
 import parser.ast.expressions.Expression;
 import parser.ast.expressions.VariableAccess;
 import parser.ast.expressions.bool.*;
@@ -9,6 +10,8 @@ import parser.types.Bool;
 import parser.types.Int;
 import tokenizer.*;
 import tokenizer.Token.TokenType;
+
+import javax.swing.*;
 
 public class ExpressionParser {
     private Scoper scoper;
@@ -119,9 +122,12 @@ public class ExpressionParser {
         if(tokens.getCurrentToken().getType() == TokenType.PLUS){
             tokens.step();
             return parseLevel7();
-        }else if(tokens.getCurrentToken().getType() == TokenType.MINUS){
+        }else if(tokens.getCurrentToken().getType() == TokenType.MINUS) {
             tokens.step();
             return new NegationExpression(parseLevel7());
+        }else if(tokens.getCurrentType() == TokenType.STAR){
+            tokens.step();
+            return new DereferenceExpression(parseLevel7());
         }else {
             return parseLevel8();
         }

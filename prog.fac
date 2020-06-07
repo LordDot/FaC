@@ -1,0 +1,16 @@
+void main(){
+  int* x = 6;
+  int* y = 7;
+
+  *x = 0;
+  *y = 0;
+
+  while(true){
+    if(*y < 1034){
+      *y = *y + 36;
+    } else {
+      *y = 0;
+      *x = *x + 36;
+    }
+  }
+}
