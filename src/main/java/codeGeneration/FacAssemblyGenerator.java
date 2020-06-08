@@ -16,6 +16,11 @@ public class FacAssemblyGenerator implements AssemblyGenerator{
         operationMapping.put(Operation.NEGATION, new FacOperation("tank", false, 0));
         operationMapping.put(Operation.BOOL_NOT, new FacOperation("fast inserter", true, 0));
         operationMapping.put(Operation.SMALLER, new FacOperation("blue splitter"));
+        operationMapping.put(Operation.COMPARISON, new FacOperation("burner inserter"));
+        operationMapping.put(Operation.GREATER, new FacOperation("red splitter"));
+        operationMapping.put(Operation.GREATER_EQUALS, new FacOperation("inserter"));
+        operationMapping.put(Operation.SMALLER_EQUALS, new FacOperation("long inserter"));
+        operationMapping.put(Operation.UNEQUAL, new FacOperation("fast inserter"));
     }
 
     private Stack<Map<String,Integer>> scopes;
