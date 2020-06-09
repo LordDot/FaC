@@ -5,4 +5,16 @@ public abstract class Type {
     public boolean equals(Object obj) {
         return obj.getClass() == this.getClass();
     }
+
+    public static Type getTypeBool(){
+        return new Bool();
+    }
+
+    public static Type getTypeInt(){
+        return new Int();
+    }
+
+    public static Type getTypeVoid(){
+        return new Void();
+    }
 }

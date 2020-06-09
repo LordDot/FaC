@@ -5,6 +5,8 @@ import parser.ast.expressions.BinaryExpression;
 import parser.ast.expressions.Expression;
 import parser.types.Int;
 import parser.types.Type;
+import static parser.types.Type.*;
+
 
 public class MultiplicationExpression extends BinaryExpression<Integer, Integer, Integer> {
     public MultiplicationExpression(Expression lhs, Expression rhs) {
@@ -18,7 +20,7 @@ public class MultiplicationExpression extends BinaryExpression<Integer, Integer,
 
     @Override
     public Type getType() {
-        return new Int();
+        return getTypeInt();
     }
 
     @Override

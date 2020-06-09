@@ -5,6 +5,8 @@ import parser.ast.expressions.BinaryExpression;
 import parser.ast.expressions.Expression;
 import parser.types.Bool;
 import parser.types.Type;
+import static parser.types.Type.*;
+
 
 public class OrExpression extends BinaryExpression<Boolean, Boolean, Boolean> {
     public OrExpression(Expression<Boolean> lhs, Expression<Boolean> rhs) {
@@ -23,6 +25,6 @@ public class OrExpression extends BinaryExpression<Boolean, Boolean, Boolean> {
 
     @Override
     public Type getType() {
-        return new Bool();
+        return getTypeBool();
     }
 }

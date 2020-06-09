@@ -6,6 +6,8 @@ import parser.ast.expressions.Expression;
 import parser.types.Bool;
 import parser.types.Type;
 
+import static parser.types.Type.*;
+
 public class AndExpression extends BinaryExpression<Boolean, Boolean, Boolean> {
     public AndExpression(Expression<Boolean> lhs, Expression<Boolean> rhs) {
         super(lhs, rhs, Operation.MULTIPLICATION);
@@ -23,6 +25,6 @@ public class AndExpression extends BinaryExpression<Boolean, Boolean, Boolean> {
 
     @Override
     public Type getType() {
-        return new Bool();
+        return getTypeBool();
     }
 }

@@ -8,10 +8,12 @@ import parser.ast.expressions.bool.*;
 import parser.ast.expressions.integer.*;
 import parser.types.Bool;
 import parser.types.Int;
+import parser.types.Type;
 import tokenizer.*;
 import tokenizer.Token.TokenType;
 
-import javax.swing.*;
+import static parser.types.Type.*;
+
 
 public class ExpressionParser {
     private Scoper scoper;
@@ -166,9 +168,9 @@ public class ExpressionParser {
     }
 
     private Expression<Boolean> constructComparison(TokenType operator, Expression lhs, Expression rhs){
-        if(lhs.getType().equals(new Int()) && rhs.getType().equals(new Int())) {
+        if(lhs.getType().equals(getTypeInt()) && rhs.getType().equals(getTypeInt())) {
             return constructIntComparison(operator, lhs, rhs);
-        }else if(lhs.getType().equals(new Bool())){
+        }else if(lhs.getType().equals(getTypeBool())){
             return constructBoolComparison(operator, lhs, rhs);
         }else{
             throw new CompilerException("Invalid operands for Comparison");

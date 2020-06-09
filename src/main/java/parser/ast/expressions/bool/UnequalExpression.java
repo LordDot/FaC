@@ -5,6 +5,8 @@ import parser.ast.expressions.BinaryExpression;
 import parser.ast.expressions.Expression;
 import parser.types.Bool;
 import parser.types.Type;
+import static parser.types.Type.*;
+
 
 public class UnequalExpression<T> extends BinaryExpression<Boolean, T, T> {
     public UnequalExpression(Expression<T> lhs, Expression<T> rhs) {
@@ -23,6 +25,6 @@ public class UnequalExpression<T> extends BinaryExpression<Boolean, T, T> {
 
     @Override
     public Type getType() {
-        return new Bool();
+        return getTypeBool();
     }
 }

@@ -5,6 +5,8 @@ import parser.ast.expressions.BinaryExpression;
 import parser.ast.expressions.Expression;
 import parser.types.Bool;
 import parser.types.Type;
+import static parser.types.Type.*;
+
 
 public class GreaterEqualsExpression extends BinaryExpression<Boolean, Integer, Integer> {
     public GreaterEqualsExpression(Expression<Integer> lhs, Expression<Integer> rhs) {
@@ -23,6 +25,6 @@ public class GreaterEqualsExpression extends BinaryExpression<Boolean, Integer, 
 
     @Override
     public Type getType() {
-        return new Bool();
+        return getTypeBool();
     }
 }

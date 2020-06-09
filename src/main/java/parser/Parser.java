@@ -14,6 +14,8 @@ import tokenizer.IntLiteralToken;
 import tokenizer.Token;
 import tokenizer.Token.TokenType;
 
+import static parser.types.Type.*;
+
 import java.util.*;
 
 public class Parser {
@@ -235,13 +237,13 @@ public class Parser {
     private Type parseType() {
         Type type = null;
         if (tokens.getCurrentToken().getType() == TokenType.KEYWORD_VOID) {
-            type = new Void();
+            type = getTypeVoid();
             tokens.step();
         } else if (tokens.getCurrentToken().getType() == TokenType.KEYWORD_INT) {
-            type = new Int();
+            type = getTypeInt();
             tokens.step();
         } else if (tokens.getCurrentType() == TokenType.KEYWORD_BOOL) {
-            type = new Bool();
+            type = getTypeBool();
             tokens.step();
         } else {
             throw new CompilerException("Function or global Variable Declaration must start with type");

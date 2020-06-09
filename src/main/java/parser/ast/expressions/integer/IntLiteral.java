@@ -4,6 +4,7 @@ import codeGeneration.AssemblyGenerator;
 import parser.ast.expressions.Expression;
 import parser.types.Int;
 import parser.types.Type;
+import static parser.types.Type.*;
 
 public class IntLiteral extends Expression<Integer> {
     private int value;
@@ -39,6 +40,6 @@ public class IntLiteral extends Expression<Integer> {
 
     @Override
     public Type getType() {
-        return new Int();
+        return getTypeInt();
     }
 }
