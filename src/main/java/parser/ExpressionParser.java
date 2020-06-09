@@ -7,7 +7,11 @@ import parser.ast.expressions.VariableAccess;
 import parser.ast.expressions.bool.*;
 import parser.ast.expressions.integer.*;
 import tokenizer.*;
-import tokenizer.Token.TokenType;
+import tokenizer.tokens.BooleanLiteralToken;
+import tokenizer.tokens.IdentifierToken;
+import tokenizer.tokens.IntLiteralToken;
+import tokenizer.tokens.Token;
+import tokenizer.tokens.Token.TokenType;
 
 import static parser.types.Type.*;
 

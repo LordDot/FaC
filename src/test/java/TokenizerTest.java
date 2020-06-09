@@ -1,6 +1,10 @@
 import org.junit.jupiter.api.Test;
 import tokenizer.*;
-import tokenizer.Token.TokenType;
+import tokenizer.tokens.BooleanLiteralToken;
+import tokenizer.tokens.IdentifierToken;
+import tokenizer.tokens.IntLiteralToken;
+import tokenizer.tokens.Token;
+import tokenizer.tokens.Token.TokenType;
 
 import java.io.IOException;
 import java.io.Reader;

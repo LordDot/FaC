@@ -1,4 +1,4 @@
-package tokenizer;
+package tokenizer.tokens;
 
 public class IdentifierToken extends Token {
     private String name;

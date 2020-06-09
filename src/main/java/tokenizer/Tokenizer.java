@@ -1,5 +1,10 @@
 package tokenizer;
 
+import tokenizer.tokens.BooleanLiteralToken;
+import tokenizer.tokens.IdentifierToken;
+import tokenizer.tokens.IntLiteralToken;
+import tokenizer.tokens.Token;
+
 import java.io.IOException;
 import java.io.Reader;
 import java.util.Iterator;

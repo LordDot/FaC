@@ -7,10 +7,10 @@ import parser.ast.expressions.VariableAccess;
 import parser.ast.expressions.WhileStatement;
 import parser.types.*;
 import tokenizer.CompilerException;
-import tokenizer.IdentifierToken;
-import tokenizer.IntLiteralToken;
-import tokenizer.Token;
-import tokenizer.Token.TokenType;
+import tokenizer.tokens.IdentifierToken;
+import tokenizer.tokens.IntLiteralToken;
+import tokenizer.tokens.Token;
+import tokenizer.tokens.Token.TokenType;
 
 import static parser.types.Type.*;
 

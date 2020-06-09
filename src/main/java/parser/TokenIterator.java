@@ -1,9 +1,8 @@
 package parser;
 
-import startUp.Compiler;
 import tokenizer.CompilerException;
-import tokenizer.Token;
-import tokenizer.Token.TokenType;
+import tokenizer.tokens.Token;
+import tokenizer.tokens.Token.TokenType;
 
 import java.util.Iterator;
 
