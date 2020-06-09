@@ -5,7 +5,9 @@ import java.util.Objects;
 public class Pointer extends Type {
     Type subType;
 
-    public Pointer(Type subType) {
+    public Pointer(Type subType)
+    {
+        super(TypeEnum.POINTER);
         this.subType = subType;
     }
 

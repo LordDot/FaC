@@ -2,7 +2,6 @@ package parser.ast.expressions.integer;
 
 import codeGeneration.AssemblyGenerator;
 import parser.ast.expressions.Expression;
-import parser.types.Int;
 import parser.types.Type;
 import static parser.types.Type.*;
 

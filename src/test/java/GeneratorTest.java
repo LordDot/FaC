@@ -1,4 +1,3 @@
-import codeGeneration.AssemblyGenerator;
 import codeGeneration.FacAssemblyGenerator;
 import org.junit.jupiter.api.Test;
 import parser.Ast;
@@ -13,11 +12,7 @@ import parser.ast.expressions.integer.IntLiteral;
 import parser.ast.expressions.integer.NegationExpression;
 import parser.ast.expressions.integer.PlusExpression;
 import parser.ast.expressions.VariableAccess;
-import parser.types.Bool;
-import parser.types.Int;
-import parser.types.Void;
 
-import javax.print.attribute.HashDocAttributeSet;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;

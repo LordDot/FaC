@@ -3,7 +3,6 @@ package parser.ast.expressions.bool;
 import codeGeneration.AssemblyGenerator;
 import parser.ast.expressions.Expression;
 import parser.ast.expressions.integer.IntLiteral;
-import parser.types.Bool;
 import parser.types.Type;
 
 import static parser.types.Type.*;

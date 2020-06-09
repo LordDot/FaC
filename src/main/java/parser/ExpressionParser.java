@@ -6,9 +6,6 @@ import parser.ast.expressions.Expression;
 import parser.ast.expressions.VariableAccess;
 import parser.ast.expressions.bool.*;
 import parser.ast.expressions.integer.*;
-import parser.types.Bool;
-import parser.types.Int;
-import parser.types.Type;
 import tokenizer.*;
 import tokenizer.Token.TokenType;
 
