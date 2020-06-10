@@ -10,6 +10,8 @@ import java.io.Reader;
 import java.util.Iterator;
 import java.util.function.Predicate;
 
+import static tokenizer.tokens.Tokens.*;
+
 public class Tokenizer implements Iterator<Token>{
 
     private Reader input;
@@ -46,27 +48,27 @@ public class Tokenizer implements Iterator<Token>{
                 }else if(Character.isLetter(c) || c == '_') {
                     String str = readString();
                     if (str.equals("int")) {
-                        return new Token(Token.TokenType.KEYWORD_INT);
+                        return KeywordInt();
                     } else if (str.equals("void")) {
-                        return new Token(Token.TokenType.KEYWORD_VOID);
+                        return KeywordVoid();
                     }else if (str.equals("return")) {
-                        return new Token(Token.TokenType.KEYWORD_RETURN);
+                        return KeywordReturn();
                     }else if(str.equals("if")){
-                        return new Token(Token.TokenType.KEYWORD_IF);
+                        return KeywordIf();
                     }else if(str.equals("else")) {
-                        return new Token(Token.TokenType.KEYWORD_ELSE);
+                        return KeywordElse();
                     }else if(str.equals("bool")) {
-                        return new Token(Token.TokenType.KEYWORD_BOOL);
+                        return KeywordBool();
                     }else if(str.equals("true")) {
                         return new BooleanLiteralToken(true);
                     } else if (str.equals("false")) {
                         return new BooleanLiteralToken(false);
                     }else if (str.equals("while")) {
-                        return new Token(Token.TokenType.KEYWORD_WHILE);
+                        return KeywordWhile();
                     }else if (str.equals("break")) {
-                        return new Token(Token.TokenType.KEYWORD_BREAK);
+                        return KeywordBreak();
                     }else if (str.equals("nobreak")){
-                        return new Token(Token.TokenType.KEYWORD_NOBREAK);
+                        return KeywordNobreak();
                     }else{
                         return new IdentifierToken(str);
                     }
@@ -76,26 +78,26 @@ public class Tokenizer implements Iterator<Token>{
                     switch (c) {
                         case '(':
                             currentChar = input.read();
-                            return new Token(Token.TokenType.BRACE_OPEN);
+                            return BraceOpen();
                         case ')':
                             currentChar = input.read();
-                            return new Token(Token.TokenType.BRACE_CLOSE);
+                            return BraceClose();
                         case '*':
                             currentChar = input.read();
-                            return new Token(Token.TokenType.STAR);
+                            return Star();
                         case '!':
                             currentChar = input.read();
                             if(currentChar == '='){
                                 currentChar = input.read();
-                                return new Token(Token.TokenType.NOT_EQUAL);
+                                return NotEqual();
                             }else{
-                                return new Token(Token.TokenType.EXCLAMATION);
+                                return Exclamation();
                             }
                         case '&':
                             currentChar = input.read();
                             if(currentChar == '&'){
                                 currentChar = input.read();
-                                return new Token(Token.TokenType.BOOLEAN_AND);
+                                return BooleanAnd();
                             }else {
                                 throw new CompilerException("& Expected");
                             }
@@ -103,59 +105,59 @@ public class Tokenizer implements Iterator<Token>{
                             currentChar = input.read();
                             if(currentChar == '|'){
                                 currentChar = input.read();
-                                return new Token(Token.TokenType.BOOLEAN_OR);
+                                return BooleanOr();
                             }else{
                                 throw new CompilerException("| Expected");
                             }
                         case '+':
                             currentChar = input.read();
-                            return new Token(Token.TokenType.PLUS);
+                            return Plus();
                         case '-':
                             currentChar = input.read();
-                            return new Token(Token.TokenType.MINUS);
+                            return Minus();
                         case '/':
                             currentChar = input.read();
-                            return new Token(Token.TokenType.SLASH);
+                            return Slash();
                         case ';':
                             currentChar = input.read();
-                            return new Token(Token.TokenType.SEMICOLON);
+                            return Semicolon();
                         case '<':
                             currentChar = input.read();
                             if(currentChar == '<') {
                                 currentChar = input.read();
-                                return new Token(Token.TokenType.LEFT_SHIFT);
+                                return LeftShift();
                             }else if(currentChar == '='){
                                 currentChar = input.read();
-                                return new Token(Token.TokenType.SMALLER_EQUAL);
+                                return SmallerEqual();
                             }else{
-                                return new Token(Token.TokenType.SMALLER);
+                                return Smaller();
                             }
                         case '>':
                             currentChar = input.read();
                             if(currentChar == '>') {
                                 currentChar = input.read();
-                                return new Token(Token.TokenType.RIGHT_SHIFT);
+                                return RightShift();
                             }else if(currentChar == '='){
                                 currentChar = input.read();
-                                return new Token(Token.TokenType.GREATER_EQUAL);
+                                return GreaterEqual();
                             }else{
-                                return new Token(Token.TokenType.GREATER);
+                                return Greater();
                             }
                             //case '^':
                         case '=':
                             currentChar = input.read();
                             if(currentChar == '='){
                                 currentChar = input.read();
-                                return new Token(Token.TokenType.COMPARE);
+                                return Compare();
                             }else {
-                                return new Token(Token.TokenType.EQUALS);
+                                return Equals();
                             }
                         case '{':
                             currentChar = input.read();
-                            return new Token(Token.TokenType.CURLY_BRACE_OPEN);
+                            return CurlyBraceOpen();
                         case '}':
                             currentChar = input.read();
-                            return new Token(Token.TokenType.CURLY_BRACE_CLOSE);
+                            return CurlyBraceClose();
                         default:
                             throw new CompilerException("Unknown character");
                     }
@@ -178,7 +180,7 @@ public class Tokenizer implements Iterator<Token>{
     }
 
     private int readInt() throws IOException {
-        return Integer.valueOf(read((c)->Character.isDigit(c)));
+        return Integer.parseInt(read((c)->Character.isDigit(c)));
     }
 
     private void readWhiteSpaces() throws IOException {
