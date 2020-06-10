@@ -1,4 +1,4 @@
-package tokenizer;
+package tokenizer.tokens;
 
 public class IntLiteralToken extends Token{
     private int value;

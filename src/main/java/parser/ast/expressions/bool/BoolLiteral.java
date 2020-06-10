@@ -3,8 +3,10 @@ package parser.ast.expressions.bool;
 import codeGeneration.AssemblyGenerator;
 import parser.ast.expressions.Expression;
 import parser.ast.expressions.integer.IntLiteral;
-import parser.types.Bool;
 import parser.types.Type;
+
+import static parser.types.Type.*;
+
 
 public class BoolLiteral extends Expression<Boolean> {
     boolean value;
@@ -40,6 +42,6 @@ public class BoolLiteral extends Expression<Boolean> {
 
     @Override
     public Type getType() {
-        return new Bool();
+        return getTypeBool();
     }
 }

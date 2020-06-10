@@ -1,42 +1,41 @@
-package tokenizer;
-
-import java.util.Objects;
+package tokenizer.tokens;
 
 public class Token {
     public enum TokenType {
         KEYWORD_VOID,
         KEYWORD_INT,
+        KEYWORD_BOOL,
         KEYWORD_RETURN,
         KEYWORD_IF,
         KEYWORD_ELSE,
-        KEYWORD_BOOL,
         KEYWORD_WHILE,
         KEYWORD_BREAK,
         KEYWORD_NOBREAK,
         CURLY_BRACE_OPEN,
         CURLY_BRACE_CLOSE,
+        BRACE_OPEN,
+        BRACE_CLOSE,
         PLUS,
         MINUS,
         STAR,
         SLASH,
-        SMALLER,
-        GREATER,
-        SMALLER_EQUAL,
-        GREATER_EQUAL,
         LEFT_SHIFT,
         RIGHT_SHIFT,
         BOOLEAN_AND,
         BOOLEAN_OR,
+        SMALLER,
+        GREATER,
+        SMALLER_EQUAL,
+        GREATER_EQUAL,
         COMPARE,
         NOT_EQUAL,
+        EQUALS,
         EXCLAMATION,
-        IDENTIFIER,
-        BRACE_OPEN,
-        BRACE_CLOSE,
+        SEMICOLON,
+
         INT_LITERAL,
         BOOLEAN_LITERAL,
-        SEMICOLON,
-        EQUALS,
+        IDENTIFIER,
     }
 
     private TokenType type;

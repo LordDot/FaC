@@ -5,14 +5,14 @@ import parser.ast.expressions.Expression;
 import parser.ast.expressions.LExpression;
 import parser.ast.expressions.VariableAccess;
 import parser.ast.expressions.WhileStatement;
-import parser.ast.expressions.integer.IntLiteral;
 import parser.types.*;
-import parser.types.Void;
 import tokenizer.CompilerException;
-import tokenizer.IdentifierToken;
-import tokenizer.IntLiteralToken;
-import tokenizer.Token;
-import tokenizer.Token.TokenType;
+import tokenizer.tokens.IdentifierToken;
+import tokenizer.tokens.IntLiteralToken;
+import tokenizer.tokens.Token;
+import tokenizer.tokens.Token.TokenType;
+
+import static parser.types.Type.*;
 
 import java.util.*;
 
@@ -235,13 +235,13 @@ public class Parser {
     private Type parseType() {
         Type type = null;
         if (tokens.getCurrentToken().getType() == TokenType.KEYWORD_VOID) {
-            type = new Void();
+            type = getTypeVoid();
             tokens.step();
         } else if (tokens.getCurrentToken().getType() == TokenType.KEYWORD_INT) {
-            type = new Int();
+            type = getTypeInt();
             tokens.step();
         } else if (tokens.getCurrentType() == TokenType.KEYWORD_BOOL) {
-            type = new Bool();
+            type = getTypeBool();
             tokens.step();
         } else {
             throw new CompilerException("Function or global Variable Declaration must start with type");

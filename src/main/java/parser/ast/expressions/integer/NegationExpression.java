@@ -3,8 +3,9 @@ package parser.ast.expressions.integer;
 import codeGeneration.AssemblyGenerator.Operation;
 import parser.ast.expressions.UnaryExpression;
 import parser.ast.expressions.Expression;
-import parser.types.Int;
 import parser.types.Type;
+import static parser.types.Type.*;
+
 
 public class NegationExpression extends UnaryExpression<Integer, Integer> {
     public NegationExpression(Expression operand) {
@@ -28,6 +29,6 @@ public class NegationExpression extends UnaryExpression<Integer, Integer> {
 
     @Override
     public Type getType() {
-        return new Int();
+        return getTypeInt();
     }
 }

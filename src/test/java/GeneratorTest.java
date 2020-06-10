@@ -1,4 +1,3 @@
-import codeGeneration.AssemblyGenerator;
 import codeGeneration.FacAssemblyGenerator;
 import org.junit.jupiter.api.Test;
 import parser.Ast;
@@ -13,22 +12,19 @@ import parser.ast.expressions.integer.IntLiteral;
 import parser.ast.expressions.integer.NegationExpression;
 import parser.ast.expressions.integer.PlusExpression;
 import parser.ast.expressions.VariableAccess;
-import parser.types.Bool;
-import parser.types.Int;
-import parser.types.Void;
 
-import javax.print.attribute.HashDocAttributeSet;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static parser.types.Type.*;
 
 
 public class GeneratorTest {
     @Test
     public void testSimpleProgram() {
         Ast ast = new Ast();
-        Variable v = new Variable("i", new Int());
-        Function function = new Function("main", new Void(), Collections.singletonList(v));
+        Variable v = new Variable("i", getTypeInt());
+        Function function = new Function("main", getTypeVoid(), Collections.singletonList(v));
         function.addStatement(new Assignment(new VariableAccess(v), new IntLiteral(0)));
         ast.addFunction(function);
 
@@ -52,9 +48,9 @@ public class GeneratorTest {
     @Test
     public void testTwoAssignments() {
         Ast ast = new Ast();
-        Variable v = new Variable("i", new Int());
-        Variable v2 = new Variable("j", new Int());
-        Function function = new Function("main", new Void(), Arrays.asList(v, v2));
+        Variable v = new Variable("i", getTypeInt());
+        Variable v2 = new Variable("j", getTypeInt());
+        Function function = new Function("main", getTypeVoid(), Arrays.asList(v, v2));
         function.addStatement(new Assignment(new VariableAccess(v), new IntLiteral(0)));
         function.addStatement(new Assignment(new VariableAccess(v2), new IntLiteral(5)));
         ast.addFunction(function);
@@ -89,9 +85,9 @@ public class GeneratorTest {
     @Test
     public void testInterScopeAssignment() {
         Ast ast = new Ast();
-        Variable v = new Variable("i", new Int());
+        Variable v = new Variable("i", getTypeInt());
         ast.addVariable(v);
-        Function function = new Function("main", new Void(), Collections.emptyList());
+        Function function = new Function("main", getTypeVoid(), Collections.emptyList());
         function.addStatement(new Assignment(new VariableAccess(v), new IntLiteral(2)));
         ast.addFunction(function);
 
@@ -114,8 +110,8 @@ public class GeneratorTest {
     @Test
     public void testIf() {
         Ast ast = new Ast();
-        Variable variable = new Variable("i", new Int());
-        Function function = new Function("name", new Void(), Collections.singletonList(variable));
+        Variable variable = new Variable("i", getTypeInt());
+        Function function = new Function("name", getTypeVoid(), Collections.singletonList(variable));
         Expression condition = new BoolLiteral(true);
         List<Statement> ifStatements = new LinkedList<>();
         ifStatements.add(new Assignment(new VariableAccess(variable), new IntLiteral(1)));
@@ -178,9 +174,9 @@ public class GeneratorTest {
     @Test
     public void testIfScoping(){
         Ast ast = new Ast();
-        Function f = new Function("main", new Void(), Collections.emptyList());
-        Variable v1 = new Variable("i", new Int());
-        Variable v2 = new Variable("i", new Int());
+        Function f = new Function("main", getTypeVoid(), Collections.emptyList());
+        Variable v1 = new Variable("i", getTypeInt());
+        Variable v2 = new Variable("i", getTypeInt());
         IfStatement ifStatement = new IfStatement(new BoolLiteral(true), Arrays.asList(new Assignment(new VariableAccess(v1), new IntLiteral(0))),
                 Arrays.asList(new Assignment(new VariableAccess(v2), new IntLiteral(2))), Arrays.asList(v1), Arrays.asList(v2));
         f.addStatement(ifStatement);
@@ -227,9 +223,9 @@ public class GeneratorTest {
     @Test
     public void testVariableRead(){
         Ast ast = new Ast();
-        Variable i = new Variable("i", new Int());
-        Variable j = new Variable("j", new Int());
-        Function function = new Function("main", new Void(), Arrays.asList(i, j));
+        Variable i = new Variable("i", getTypeInt());
+        Variable j = new Variable("j", getTypeInt());
+        Function function = new Function("main", getTypeVoid(), Arrays.asList(i, j));
         Statement assignI = new Assignment(new VariableAccess(i), new IntLiteral(2));
         function.addStatement(assignI);
         Statement assignJ = new Assignment(new VariableAccess(j), new VariableAccess(i));
@@ -269,9 +265,9 @@ public class GeneratorTest {
     public void testNegation(){
         Ast ast = new Ast();
         List<Variable> scope = new LinkedList<>();
-        Variable i = new Variable("i", new Int());
+        Variable i = new Variable("i", getTypeInt());
         scope.add(i);
-        Function f = new Function("main", new Void(), scope);
+        Function f = new Function("main", getTypeVoid(), scope);
         f.addStatement(new Assignment(new VariableAccess(i), new NegationExpression(new IntLiteral(2))));
         ast.addFunction(f);
 
@@ -302,8 +298,8 @@ public class GeneratorTest {
     @Test
     public void testAddition(){
         Ast ast = new Ast();
-        Variable i = new Variable("i", new Int());
-        Function function = new Function("main", new Void(), Arrays.asList(i));
+        Variable i = new Variable("i", getTypeInt());
+        Function function = new Function("main", getTypeVoid(), Arrays.asList(i));
         Statement assignI = new Assignment(new VariableAccess(i), new PlusExpression(new IntLiteral(1),new IntLiteral(1)));
         function.addStatement(assignI);
         ast.addFunction(function);
@@ -341,9 +337,9 @@ public class GeneratorTest {
     public void testBooleanFalse(){
         Ast ast = new Ast();
         List<Variable> scope = new LinkedList<>();
-        Variable b = new Variable("b", new Bool());
+        Variable b = new Variable("b", getTypeBool());
         scope.add(b);
-        Function f = new Function("main", new Void(), scope);
+        Function f = new Function("main", getTypeVoid(), scope);
         f.addStatement(new Assignment(new VariableAccess(b), new BoolLiteral(false)));
         ast.addFunction(f);
 
@@ -368,9 +364,9 @@ public class GeneratorTest {
     public void testBooleanTrue(){
         Ast ast = new Ast();
         List<Variable> scope = new LinkedList<>();
-        Variable b = new Variable("b", new Bool());
+        Variable b = new Variable("b", getTypeBool());
         scope.add(b);
-        Function f = new Function("main", new Void(), scope);
+        Function f = new Function("main", getTypeVoid(), scope);
         f.addStatement(new Assignment(new VariableAccess(b), new BoolLiteral(true)));
         ast.addFunction(f);
 
@@ -395,9 +391,9 @@ public class GeneratorTest {
     public void testBooleanAnd(){
         Ast ast = new Ast();
         List<Variable> scope = new LinkedList<>();
-        Variable b = new Variable("b", new Bool());
+        Variable b = new Variable("b", getTypeBool());
         scope.add(b);
-        Function f = new Function("main", new Void(), scope);
+        Function f = new Function("main", getTypeVoid(), scope);
         f.addStatement(new Assignment(new VariableAccess(b), new AndExpression(new BoolLiteral(false), new BoolLiteral(true))));
         ast.addFunction(f);
 
@@ -434,9 +430,9 @@ public class GeneratorTest {
     public void testBooleanOr(){
         Ast ast = new Ast();
         List<Variable> scope = new LinkedList<>();
-        Variable b = new Variable("b", new Bool());
+        Variable b = new Variable("b", getTypeBool());
         scope.add(b);
-        Function f = new Function("main", new Void(), scope);
+        Function f = new Function("main", getTypeVoid(), scope);
         f.addStatement(new Assignment(new VariableAccess(b), new OrExpression(new BoolLiteral(false), new BoolLiteral(true))));
         ast.addFunction(f);
 
@@ -473,9 +469,9 @@ public class GeneratorTest {
     public void testBooleanNot(){
         Ast ast = new Ast();
         List<Variable> scope = new LinkedList<>();
-        Variable b = new Variable("b", new Bool());
+        Variable b = new Variable("b", getTypeBool());
         scope.add(b);
-        Function f = new Function("main", new Void(), scope);
+        Function f = new Function("main", getTypeVoid(), scope);
         f.addStatement(new Assignment(new VariableAccess(b), new NotExpression(new BoolLiteral(false))));
         ast.addFunction(f);
 
@@ -506,10 +502,10 @@ public class GeneratorTest {
     @Test
     public void testWhile(){
         Ast ast = new Ast();
-        Function f = new Function("main", new Void(), Collections.EMPTY_LIST);
+        Function f = new Function("main", getTypeVoid(), Collections.EMPTY_LIST);
         ast.addFunction(f);
-        Variable v1 = new Variable("i", new Int());
-        Variable v2 = new Variable("i", new Int());
+        Variable v1 = new Variable("i", getTypeInt());
+        Variable v2 = new Variable("i", getTypeInt());
         f.addStatement(new WhileStatement(new BoolLiteral(true), Collections.singletonList(new Assignment(new VariableAccess(v1), new IntLiteral(1))),
                  Collections.singletonList(v1), Collections.singletonList(new Assignment(new VariableAccess(v2), new IntLiteral(2))), Collections.singletonList(v2)));
 
@@ -566,10 +562,10 @@ public class GeneratorTest {
     @Test
     public void testWhileBreak(){
         Ast ast = new Ast();
-        Function f = new Function("main", new Void(), Collections.EMPTY_LIST);
+        Function f = new Function("main", getTypeVoid(), Collections.EMPTY_LIST);
         ast.addFunction(f);
-        Variable v1 = new Variable("i", new Int());
-        Variable v2 = new Variable("i", new Int());
+        Variable v1 = new Variable("i", getTypeInt());
+        Variable v2 = new Variable("i", getTypeInt());
         f.addStatement(new WhileStatement(new BoolLiteral(true), Arrays.asList(new Assignment(new VariableAccess(v1), new IntLiteral(1)),new BreakStatement(0)),
                 Collections.singletonList(v1), Collections.singletonList(new Assignment(new VariableAccess(v2), new IntLiteral(2))), Collections.singletonList(v2)));
 
@@ -632,8 +628,8 @@ public class GeneratorTest {
     @Test
     public void testMultiWhileBreak(){
         Ast ast = new Ast();
-        Variable v = new Variable("i", new Int());
-        Function f = new Function("main", new Void(), Collections.singletonList(v));
+        Variable v = new Variable("i", getTypeInt());
+        Function f = new Function("main", getTypeVoid(), Collections.singletonList(v));
 
         Statement innerWhile = new WhileStatement(new BoolLiteral(true), Arrays.asList(new Statement[]{new BreakStatement(0), new BreakStatement(1)}),
                 Collections.EMPTY_LIST, Collections.singletonList(new Assignment(new VariableAccess(v), new IntLiteral(0))), Collections.EMPTY_LIST);
@@ -721,10 +717,5 @@ public class GeneratorTest {
         command12.put("R", 0);
         command12.put("O", 1);
         expected.add(command12);
-    }
-
-    @Test
-    public void testOperators(){
-        fail();
     }
 }

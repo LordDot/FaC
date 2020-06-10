@@ -2,11 +2,11 @@ import org.junit.jupiter.api.Test;
 import parser.Parser;
 import parser.Scoper;
 import parser.TokenIterator;
-import tokenizer.BooleanLiteralToken;
-import tokenizer.IdentifierToken;
-import tokenizer.IntLiteralToken;
-import tokenizer.Token;
-import tokenizer.Token.TokenType;
+import tokenizer.tokens.BooleanLiteralToken;
+import tokenizer.tokens.IdentifierToken;
+import tokenizer.tokens.IntLiteralToken;
+import tokenizer.tokens.Token;
+import tokenizer.tokens.Token.TokenType;
 
 import java.util.Arrays;
 import java.util.List;

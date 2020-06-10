@@ -1,4 +1,4 @@
-package tokenizer;
+package tokenizer.tokens;
 
 public class BooleanLiteralToken extends Token {
     private boolean value;

@@ -3,8 +3,9 @@ package parser.ast.expressions.bool;
 import codeGeneration.AssemblyGenerator.Operation;
 import parser.ast.expressions.Expression;
 import parser.ast.expressions.BinaryExpression;
-import parser.types.Bool;
 import parser.types.Type;
+import static parser.types.Type.*;
+
 
 public class CompareExpression<T> extends BinaryExpression<Boolean, T, T> {
     public CompareExpression(Expression<T> lhs, Expression<T> rhs) {
@@ -23,6 +24,6 @@ public class CompareExpression<T> extends BinaryExpression<Boolean, T, T> {
 
     @Override
     public Type getType() {
-        return new Bool();
+        return getTypeBool();
     }
 }

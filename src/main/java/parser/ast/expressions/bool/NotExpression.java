@@ -3,8 +3,9 @@ package parser.ast.expressions.bool;
 import codeGeneration.AssemblyGenerator.Operation;
 import parser.ast.expressions.Expression;
 import parser.ast.expressions.UnaryExpression;
-import parser.types.Bool;
 import parser.types.Type;
+import static parser.types.Type.*;
+
 
 public class NotExpression extends UnaryExpression<Boolean, Boolean> {
     public NotExpression(Expression operand) {
@@ -28,6 +29,6 @@ public class NotExpression extends UnaryExpression<Boolean, Boolean> {
 
     @Override
     public Type getType() {
-        return new Bool();
+        return getTypeBool();
     }
 }
