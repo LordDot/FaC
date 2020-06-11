@@ -4,26 +4,16 @@ import codeGeneration.AssemblyGenerator;
 import parser.types.Pointer;
 import parser.types.Type;
 
-public class DereferenceExpression<T> extends LExpression<T>{
-    private Expression<T> pointer;
+public class DereferenceExpression extends LExpression{
+    private Expression pointer;
 
-    public DereferenceExpression(Expression<T> pointer) {
+    public DereferenceExpression(Expression pointer) {
         this.pointer = pointer;
     }
 
     @Override
     public String toPrettyString() {
         return "*(" + pointer.toPrettyString() + ")";
-    }
-
-    @Override
-    public boolean isConstant() {
-        return false;
-    }
-
-    @Override
-    public T getValue() {
-        return null;
     }
 
     @Override

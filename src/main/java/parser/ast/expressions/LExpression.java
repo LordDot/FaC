@@ -2,7 +2,7 @@ package parser.ast.expressions;
 
 import codeGeneration.AssemblyGenerator;
 
-public abstract class LExpression<T> extends Expression<T>{
+public abstract class LExpression extends Expression{
     @Override
     public boolean isLValue() {
         return true;

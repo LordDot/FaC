@@ -8,13 +8,13 @@ import java.util.List;
 import java.util.function.IntConsumer;
 
 public class WhileStatement extends Statement {
-    private Expression<Boolean> condition;
+    private Expression condition;
     private List<Statement> bodyStatements;
     private List<Variable> bodyScope;
     private List<Statement> nobreakStatements;
     private List<Variable> nobreakScope;
 
-    public WhileStatement(Expression<Boolean> condition, List<Statement> bodyStatements, List<Variable> bodyScope, List<Statement> nobreakStatements, List<Variable> nobreakScope) {
+    public WhileStatement(Expression condition, List<Statement> bodyStatements, List<Variable> bodyScope, List<Statement> nobreakStatements, List<Variable> nobreakScope) {
         this.condition = condition;
         this.bodyStatements = bodyStatements;
         this.bodyScope = bodyScope;

@@ -7,16 +7,11 @@ import parser.types.Type;
 import static parser.types.Type.*;
 
 
-public class PlusExpression extends BinaryExpression<Integer, Integer, Integer> {
+public class PlusExpression extends BinaryExpression {
 
 
     public PlusExpression(Expression lhs, Expression rhs) {
         super(lhs, rhs, Operation.ADDITION);
-    }
-
-    @Override
-    public Integer getValue() {
-        return ((Integer)getLhs().getValue()) + ((Integer)getRhs().getValue());
     }
 
     @Override

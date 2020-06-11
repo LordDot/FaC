@@ -8,7 +8,7 @@ import parser.types.Type;
 import static parser.types.Type.*;
 
 
-public class BoolLiteral extends Expression<Boolean> {
+public class BoolLiteral extends Expression {
     boolean value;
 
     public BoolLiteral(boolean value) {
@@ -18,16 +18,6 @@ public class BoolLiteral extends Expression<Boolean> {
     @Override
     public String toPrettyString() {
         return value?"true":"false";
-    }
-
-    @Override
-    public boolean isConstant() {
-        return true;
-    }
-
-    @Override
-    public Boolean getValue() {
-        return value;
     }
 
     @Override

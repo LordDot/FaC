@@ -7,7 +7,7 @@ import parser.types.Type;
 import static parser.types.Type.*;
 
 
-public class NegationExpression extends UnaryExpression<Integer, Integer> {
+public class NegationExpression extends UnaryExpression {
     public NegationExpression(Expression operand) {
         super(operand, Operation.NEGATION);
     }
@@ -20,11 +20,6 @@ public class NegationExpression extends UnaryExpression<Integer, Integer> {
     @Override
     protected String getSuffix() {
         return "";
-    }
-
-    @Override
-    public Integer getValue() {
-        return -((Integer)getOperand().getValue());
     }
 
     @Override

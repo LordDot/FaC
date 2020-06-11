@@ -7,14 +7,9 @@ import parser.types.Type;
 import static parser.types.Type.*;
 
 
-public class MinusExpression extends BinaryExpression<Integer, Integer, Integer> {
+public class MinusExpression extends BinaryExpression {
     public MinusExpression(Expression lhs, Expression rhs) {
         super(lhs, rhs, Operation.SUBTRACTION);
-    }
-
-    @Override
-    public Integer getValue() {
-        return ((Integer)getLhs().getValue()) - ((Integer)getRhs().getValue());
     }
 
     @Override

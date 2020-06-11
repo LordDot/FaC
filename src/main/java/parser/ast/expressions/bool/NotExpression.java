@@ -7,7 +7,7 @@ import parser.types.Type;
 import static parser.types.Type.*;
 
 
-public class NotExpression extends UnaryExpression<Boolean, Boolean> {
+public class NotExpression extends UnaryExpression {
     public NotExpression(Expression operand) {
         super(operand, Operation.BOOL_NOT);
     }
@@ -20,11 +20,6 @@ public class NotExpression extends UnaryExpression<Boolean, Boolean> {
     @Override
     protected String getSuffix() {
         return "";
-    }
-
-    @Override
-    public Boolean getValue() {
-        return !((Boolean)getOperand().getValue());
     }
 
     @Override

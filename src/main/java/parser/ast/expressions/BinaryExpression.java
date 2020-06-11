@@ -3,20 +3,15 @@ package parser.ast.expressions;
 import codeGeneration.AssemblyGenerator;
 import codeGeneration.AssemblyGenerator.Operation;
 
-public abstract class BinaryExpression<R,T1,T2> extends Expression<R> {
-    private Expression<T1> lhs;
-    private Expression<T2> rhs;
+public abstract class BinaryExpression extends Expression {
+    private Expression lhs;
+    private Expression rhs;
     private Operation operation;
 
-    public BinaryExpression(Expression<T1> lhs, Expression<T2> rhs, Operation operation) {
+    public BinaryExpression(Expression lhs, Expression rhs, Operation operation) {
         this.rhs = rhs;
         this.lhs = lhs;
         this.operation = operation;
-    }
-
-    @Override
-    public boolean isConstant() {
-        return rhs.isConstant() && lhs.isConstant();
     }
 
     @Override

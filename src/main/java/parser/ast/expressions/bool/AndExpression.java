@@ -7,19 +7,14 @@ import parser.types.Type;
 
 import static parser.types.Type.*;
 
-public class AndExpression extends BinaryExpression<Boolean, Boolean, Boolean> {
-    public AndExpression(Expression<Boolean> lhs, Expression<Boolean> rhs) {
+public class AndExpression extends BinaryExpression {
+    public AndExpression(Expression lhs, Expression rhs) {
         super(lhs, rhs, Operation.MULTIPLICATION);
     }
 
     @Override
     protected String getOperator() {
         return "&&";
-    }
-
-    @Override
-    public Boolean getValue() {
-        return ((Boolean)getLhs().getValue()) && (Boolean)getRhs().getValue();
     }
 
     @Override

@@ -7,19 +7,14 @@ import parser.types.Type;
 import static parser.types.Type.*;
 
 
-public class GreaterExpression extends BinaryExpression<Boolean, Integer, Integer> {
-    public GreaterExpression(Expression<Integer> lhs, Expression<Integer> rhs) {
+public class GreaterExpression extends BinaryExpression {
+    public GreaterExpression(Expression lhs, Expression rhs) {
         super(lhs, rhs, Operation.GREATER);
     }
 
     @Override
     protected String getOperator() {
         return ">";
-    }
-
-    @Override
-    public Boolean getValue() {
-        return ((Integer)getLhs().getValue()) > (Integer) getRhs().getValue();
     }
 
     @Override

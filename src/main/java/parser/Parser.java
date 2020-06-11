@@ -147,7 +147,7 @@ public class Parser {
     private Statement parseWhileLoop() {
         tokens.step();
         tokens.expectedToken(TokenType.BRACE_OPEN);
-        Expression<Boolean> condition = expressionParser.parseExpression();
+        Expression condition = expressionParser.parseExpression();
         tokens.expectedToken(TokenType.BRACE_CLOSE);
         List<Statement> bodyStatements = parseBlock();
         List<Variable> bodyScope = scoper.popScope();

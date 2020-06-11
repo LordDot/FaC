@@ -4,8 +4,8 @@ import codeGeneration.AssemblyGenerator;
 import codeGeneration.AssemblyGenerator.Operation;
 import parser.ast.expressions.Expression;
 
-public abstract class UnaryExpression<R,T> extends Expression<R> {
-    private Expression<T> operand;
+public abstract class UnaryExpression extends Expression {
+    private Expression operand;
     private Operation operation;
 
     public UnaryExpression(Expression operand, Operation operation) {
@@ -30,11 +30,6 @@ public abstract class UnaryExpression<R,T> extends Expression<R> {
 
     protected abstract String getPrefix();
     protected abstract String getSuffix();
-
-    @Override
-    public boolean isConstant() {
-        return operand.isConstant();
-    }
 
     @Override
     public void generateAssemblyByPointer(AssemblyGenerator generator, int intoPointer) {

@@ -6,19 +6,14 @@ import parser.ast.expressions.BinaryExpression;
 import parser.types.Type;
 import static parser.types.Type.*;
 
-public class DivisionExpression extends BinaryExpression<Integer, Integer, Integer> {
-    public DivisionExpression(Expression<Integer> lhs, Expression<Integer> rhs) {
+public class DivisionExpression extends BinaryExpression {
+    public DivisionExpression(Expression lhs, Expression rhs) {
         super(lhs, rhs, Operation.DIVISION);
     }
 
     @Override
     protected String getOperator() {
         return "/";
-    }
-
-    @Override
-    public Integer getValue() {
-        return ((Integer)getLhs().getValue()) / ((Integer)getRhs().getValue());
     }
 
     @Override

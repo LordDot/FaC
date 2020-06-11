@@ -7,19 +7,14 @@ import parser.types.Type;
 import static parser.types.Type.*;
 
 
-public class CompareExpression<T> extends BinaryExpression<Boolean, T, T> {
-    public CompareExpression(Expression<T> lhs, Expression<T> rhs) {
+public class CompareExpression<T> extends BinaryExpression {
+    public CompareExpression(Expression lhs, Expression rhs) {
         super(lhs, rhs, Operation.COMPARISON);
     }
 
     @Override
     protected String getOperator() {
         return "==";
-    }
-
-    @Override
-    public Boolean getValue() {
-        return ((T)getLhs().getValue()).equals((T)getRhs().getValue());
     }
 
     @Override

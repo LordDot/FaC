@@ -168,7 +168,7 @@ public class ExpressionParser {
         }
     }
 
-    private Expression<Boolean> constructComparison(TokenType operator, Expression lhs, Expression rhs){
+    private Expression constructComparison(TokenType operator, Expression lhs, Expression rhs){
         if(lhs.getType().equals(getTypeInt()) && rhs.getType().equals(getTypeInt())) {
             return constructIntComparison(operator, lhs, rhs);
         }else if(lhs.getType().equals(getTypeBool())){
@@ -178,22 +178,22 @@ public class ExpressionParser {
         }
     }
 
-    private Expression<Boolean> constructBoolComparison(TokenType operator, Expression<Boolean> lhs, Expression<Boolean> rhs){
+    private Expression constructBoolComparison(TokenType operator, Expression lhs, Expression rhs){
         if(operator == TokenType.COMPARE) {
-            return new CompareExpression<Boolean>(lhs, rhs);
+            return new CompareExpression(lhs, rhs);
         }else if(operator == TokenType.NOT_EQUAL){
-            return new UnequalExpression<Boolean>(lhs, rhs);
+            return new UnequalExpression(lhs, rhs);
 
         }else{
             throw new CompilerException("Unknown comparison for Booleans");
         }
     }
 
-    private Expression<Boolean> constructIntComparison(TokenType operator, Expression<Integer> lhs, Expression<Integer> rhs){
+    private Expression constructIntComparison(TokenType operator, Expression lhs, Expression rhs){
         if(operator == TokenType.COMPARE) {
-            return new CompareExpression<Integer>(lhs, rhs);
+            return new CompareExpression(lhs, rhs);
         }else if(operator == TokenType.NOT_EQUAL){
-            return new UnequalExpression<Integer>(lhs, rhs);
+            return new UnequalExpression(lhs, rhs);
         }else if(operator == TokenType.SMALLER){
             return new SmallerExpression(lhs, rhs);
         }else if(operator == TokenType.SMALLER_EQUAL){

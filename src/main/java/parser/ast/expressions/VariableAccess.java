@@ -5,7 +5,7 @@ import parser.ast.Variable;
 import parser.ast.expressions.Expression;
 import parser.types.Type;
 
-public class VariableAccess extends LExpression<Integer> {
+public class VariableAccess extends LExpression {
     private Variable accessed;
 
     public VariableAccess(Variable accessed) {
@@ -15,16 +15,6 @@ public class VariableAccess extends LExpression<Integer> {
     @Override
     public String toPrettyString() {
         return accessed.getName();
-    }
-
-    @Override
-    public boolean isConstant() {
-        return false;
-    }
-
-    @Override
-    public Integer getValue() {
-        return null;
     }
 
     @Override

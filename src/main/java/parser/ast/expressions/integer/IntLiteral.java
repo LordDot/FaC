@@ -5,21 +5,11 @@ import parser.ast.expressions.Expression;
 import parser.types.Type;
 import static parser.types.Type.*;
 
-public class IntLiteral extends Expression<Integer> {
+public class IntLiteral extends Expression {
     private int value;
 
     public IntLiteral(int value) {
         this.value = value;
-    }
-
-    @Override
-    public boolean isConstant() {
-        return true;
-    }
-
-    @Override
-    public Integer getValue(){
-        return value;
     }
 
     @Override

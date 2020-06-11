@@ -7,20 +7,15 @@ import parser.types.Type;
 import static parser.types.Type.*;
 
 
-public class SmallerExpression extends BinaryExpression<Boolean, Integer, Integer> {
+public class SmallerExpression extends BinaryExpression {
 
-    public SmallerExpression(Expression<Integer> lhs, Expression<Integer> rhs) {
+    public SmallerExpression(Expression lhs, Expression rhs) {
         super(lhs, rhs, Operation.SMALLER);
     }
 
     @Override
     protected String getOperator() {
         return "<";
-    }
-
-    @Override
-    public Boolean getValue() {
-        return ((Integer)getLhs().getValue()) < (Integer)getRhs().getValue();
     }
 
     @Override

@@ -7,19 +7,14 @@ import parser.types.Type;
 import static parser.types.Type.*;
 
 
-public class OrExpression extends BinaryExpression<Boolean, Boolean, Boolean> {
-    public OrExpression(Expression<Boolean> lhs, Expression<Boolean> rhs) {
+public class OrExpression extends BinaryExpression {
+    public OrExpression(Expression lhs, Expression rhs) {
         super(lhs, rhs, Operation.ADDITION);
     }
 
     @Override
     protected String getOperator() {
         return "||";
-    }
-
-    @Override
-    public Boolean getValue() {
-        return (Boolean)getLhs().getValue() || (Boolean)getRhs().getValue();
     }
 
     @Override
