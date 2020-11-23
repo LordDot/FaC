@@ -1,4 +1,7 @@
 # FaC
+HALTED
+
+Compiler for a C inspired language with the architecture of a Computer built in the game Factorio as a target.
 
 ## Operator Presedence
 
